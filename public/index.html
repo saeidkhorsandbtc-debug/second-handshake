@@ -1287,6 +1287,197 @@
       margin: 8px 0 0;
     }
 
+    /* Dynamic Platform & Category Form */
+    .dynamic-section {
+      background: var(--control-bg);
+      border: 1px solid var(--stroke-card);
+      border-radius: var(--radius-md);
+      padding: 13px;
+      margin-bottom: 14px;
+      animation: fluentEnter 0.24s var(--fluent-decelerate);
+    }
+
+    .dynamic-section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .dynamic-section-head small {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--accent-subtle);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(40, 153, 245, 0.25);
+    }
+
+    .dynamic-subhead {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dynamic-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .dynamic-grid .field {
+      margin-bottom: 0;
+    }
+
+    .dynamic-grid .field.span-2 {
+      grid-column: 1 / -1;
+    }
+
+    .dynamic-grid .input-control {
+      padding: 8px 10px;
+      font-size: 0.81rem;
+    }
+
+    @media (max-width: 520px) {
+      .dynamic-grid { grid-template-columns: 1fr; }
+      .dynamic-grid .field.span-2 { grid-column: auto; }
+    }
+
+    /* Live Comparable Listings (Divar / Sheypoor / Bama) */
+    .comp-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 540px) {
+      .comp-summary-grid { grid-template-columns: 1fr; }
+    }
+
+    .comp-stat {
+      background: var(--control-bg);
+      border: 1px solid var(--stroke-subtle);
+      border-radius: 10px;
+      padding: 9px 10px;
+    }
+
+    .comp-stat small {
+      display: block;
+      font-size: 0.69rem;
+      color: var(--text-tertiary);
+      margin-bottom: 3px;
+    }
+
+    .comp-stat strong {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      line-height: 1.45;
+    }
+
+    .comp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .comp-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      background: var(--control-bg);
+      border: 1px solid var(--stroke-subtle);
+      transition: border-color 0.18s var(--fluent-ease), background-color 0.18s var(--fluent-ease);
+    }
+
+    .comp-card:hover {
+      border-color: var(--accent-cyan);
+      background: var(--control-hover);
+    }
+
+    .comp-card-main {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .comp-card-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+
+    .site-tag {
+      font-size: 0.66rem;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+
+    .site-divar { background: rgba(166, 38, 38, 0.2); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.35); }
+    .site-sheypoor { background: rgba(37, 99, 235, 0.2); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.35); }
+    .site-bama { background: rgba(6, 182, 212, 0.18); color: #22d3ee; border: 1px solid rgba(34, 211, 238, 0.35); }
+    .site-other { background: var(--accent-subtle); color: var(--accent-cyan); border: 1px solid rgba(40, 153, 245, 0.3); }
+
+    .comp-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .comp-note {
+      font-size: 0.72rem;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+
+    .comp-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .comp-price {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--success-fg);
+      white-space: nowrap;
+    }
+
+    .comp-link {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      padding: 3px 8px;
+      border-radius: 7px;
+      background: var(--accent-subtle);
+      border: 1px solid rgba(40, 153, 245, 0.28);
+      white-space: nowrap;
+    }
+
+    .comp-link:hover { filter: brightness(1.15); }
+
     /* Print / PDF */
     @media print {
       body { background: #fff !important; color: #000 !important; padding: 0 !important; }
@@ -1437,6 +1628,39 @@
 
               <div id="blacklistAlert" class="blacklist-alert" role="alert"></div>
 
+              <!-- Dynamic Platform & Category Specific Fields -->
+              <div id="dynamicFieldsBox" class="dynamic-section">
+                <div class="dynamic-section-head">
+                  <span>🎯 مشخصات تخصصی برای کارشناسی دقیق‌تر</span>
+                  <small id="dynamicContextTag">دیوار • موبایل و دیجیتال</small>
+                </div>
+                <div id="categoryDynamicWrap"></div>
+                <div id="platformDynamicWrap" style="margin-top:11px; padding-top:11px; border-top:1px solid var(--stroke-subtle);"></div>
+              </div>
+              <datalist id="iranCitiesList">
+                <option value="تهران"></option>
+                <option value="مشهد"></option>
+                <option value="اصفهان"></option>
+                <option value="کرج"></option>
+                <option value="شیراز"></option>
+                <option value="تبریز"></option>
+                <option value="اهواز"></option>
+                <option value="قم"></option>
+                <option value="رشت"></option>
+                <option value="ساری"></option>
+                <option value="یزد"></option>
+                <option value="کرمان"></option>
+                <option value="ارومیه"></option>
+                <option value="همدان"></option>
+                <option value="بندرعباس"></option>
+                <option value="سمنان"></option>
+                <option value="دامغان"></option>
+                <option value="اراک"></option>
+                <option value="قزوین"></option>
+                <option value="گرگان"></option>
+                <option value="زنجان"></option>
+              </datalist>
+
               <div class="field">
                 <label for="rawText">
                   <span>لینک، متن آگهی یا خلاصه چت با فروشنده</span>
@@ -1534,6 +1758,16 @@
                 </div>
 
                 <div id="reportThumbsWrap" class="report-thumbs" style="display:none;"></div>
+              </div>
+
+              <!-- Live Divar / Sheypoor / Bama Comparable Ads Card -->
+              <div id="comparablesCard" class="card fluent-surface reveal-target" style="display:none;">
+                <div class="card-title">
+                  <span>📊 مقایسه زنده با آگهی‌های مشابه دیوار و شیپور</span>
+                  <small id="compProductTag"></small>
+                </div>
+                <div id="compSummaryGrid" class="comp-summary-grid"></div>
+                <div id="compList" class="comp-list"></div>
               </div>
 
               <div class="card fluent-surface">
@@ -2128,6 +2362,7 @@
       const state = {
         platform: 'divar',
         category: 'mobile',
+        details: {},
         selectedFlags: [],
         images: [], // { base64, preview, thumb, kb }
         followupImage: null, // { base64, preview, thumb, kb }
@@ -2181,6 +2416,73 @@
         other: 'سایر کالاها'
       };
 
+      const PLATFORM_PLACEHOLDERS = {
+        divar: 'توضیحات کامل آگهی دیوار، لینک آگهی یا متن چت با فروشنده را اینجا قرار دهید...',
+        instagram: 'لینک پیج، توضیحات بیو، کپشن پست یا متن پیام‌های دایرکت فروشنده را اینجا قرار دهید...',
+        bama: 'توضیحات آگهی خودرو (برگه کارشناسی، وضعیت فنی/گیربکس، لاستیک‌ها، شرایط قولنامه)...',
+        sheypoor: 'متن آگهی شیپور، شرایط ارسال یا بازدید حضوری و پیام‌های فروشنده را اینجا قرار دهید...',
+        telegram: 'آیدی کانال/فروشنده، متن پیام‌های تلگرام یا لینک سایت فروشنده را اینجا قرار دهید...'
+      };
+
+      const PLATFORM_FIELD_SCHEMAS = {
+        divar: [
+          { key: 'city', label: 'شهر آگهی (برای مقایسه قیمت محلی)', type: 'city', placeholder: 'مثلاً تهران' },
+          { key: 'sellerBadge', label: 'وضعیت احراز هویت / فروشگاه', type: 'select', options: ['نامشخص', 'تایید هویت شده / فروشگاه معتبر', 'کاربر عادی با سابقه', 'حساب تازه‌ساخت / بدون احراز'] },
+          { key: 'safePay', label: 'پذیرش پرداخت امن دیوار (تومن)', type: 'select', options: ['هنوز نپرسیده‌ام', 'بله، موافق پرداخت امن است', 'خیر، مخالفت کرد و کارت‌به‌کارت خواست'] },
+          { key: 'dealType', label: 'روش تحویل پیشنهادی فروشنده', type: 'select', options: ['نامشخص', 'بازدید و تست حضوری', 'ارسال با پیک/پست پس از واریز', 'پرداخت در محل'] }
+        ],
+        sheypoor: [
+          { key: 'city', label: 'شهر آگهی', type: 'city', placeholder: 'مثلاً کرج' },
+          { key: 'sellerBadge', label: 'سابقه فروشنده در شیپور', type: 'select', options: ['نامشخص', 'فروشگاه تاییدشده', 'کاربر قدیمی', 'آگهی‌دهنده جدید'] },
+          { key: 'safePay', label: 'پذیرش معامله امن / حضوری', type: 'select', options: ['هنوز نپرسیده‌ام', 'بله، تست حضوری می‌پذیرد', 'خیر، اصرار بر بیعانه/واریز قبلی دارد'] },
+          { key: 'dealType', label: 'روش تحویل', type: 'select', options: ['نامشخص', 'تحویل حضوری', 'ارسال با پست/تیپاکس'] }
+        ],
+        instagram: [
+          { key: 'igFollowers', label: 'تعداد فالوور پیج (تقریبی)', type: 'text', placeholder: 'مثلاً 15K یا 1,200' },
+          { key: 'igNameChanges', label: 'تعداد تغییر نام کاربری (About Account)', type: 'select', options: ['چک نکرده‌ام', '۰ یا ۱ بار (عادی)', '۲ تا ۴ بار (نیاز به احتیاط)', '۵ بار یا بیشتر (بسیار مشکوک)'] },
+          { key: 'igComments', label: 'وضعیت کامنت‌های پست‌ها', type: 'select', options: ['چک نکرده‌ام', 'باز و دارای نظرات واقعی', 'محدود / فیلتر شده', 'کاملاً بسته'] },
+          { key: 'igTrust', label: 'آدرس حضوری / سایت و اینماد', type: 'select', options: ['نامشخص', 'دارد و قابل استعلام است', 'فقط پیج است (بدون آدرس و سایت)', 'آدرس ناقص یا غیرواقعی'] }
+        ],
+        bama: [
+          { key: 'city', label: 'شهر بازدید خودرو', type: 'city', placeholder: 'مثلاً تهران' },
+          { key: 'carSellerRole', label: 'سمت آگهی‌دهنده', type: 'select', options: ['نامشخص', 'مالک شخصی (برگ سبز به نام خودش)', 'نمایشگاه / اتوگالری', 'دلال / واسطه (وکالتی)'] },
+          { key: 'carInspection', label: 'پذیرش کارشناسی رنگ/فنی انتخابی شما', type: 'select', span: 2, options: ['هنوز نپرسیده‌ام', 'بله، موافق کارشناسی به انتخاب خریدار', 'خیر / اصرار بر برگه کارشناسی خودش'] }
+        ],
+        telegram: [
+          { key: 'tgChannelType', label: 'نوع فروشنده در تلگرام/سایر', type: 'select', options: ['نامشخص', 'کانال عمومی با سابقه بالا', 'پی‌وی شخصی یا گروه', 'ربات / سایت متصل به تلگرام'] },
+          { key: 'tgViewsRatio', label: 'نسبت بازدید پست‌ها به تعداد اعضا', type: 'select', options: ['نامشخص', 'طبیعی و هماهنگ', 'بسیار پایین (ممبر فیک)'] },
+          { key: 'tgEscrow', label: 'روش پرداخت درخواستی', type: 'select', span: 2, options: ['نامشخص', 'حضوری / پرداخت امن', 'کارت‌به‌کارت قبل از ارسال', 'ارز دیجیتال / تتر'] }
+        ]
+      };
+
+      const CATEGORY_FIELD_SCHEMAS = {
+        mobile: [
+          { key: 'itemModel', label: 'مدل دقیق، حافظه و رم (برای جستجوی دیوار/شیپور)', type: 'text', span: 2, placeholder: 'مثلاً آیفون 13 پرو 256 گیگ یا گلکسی S24 Ultra' },
+          { key: 'batteryHealth', label: 'سلامت باتری / مدت کارکرد', type: 'text', placeholder: 'مثلاً 89% یا 6 ماه کارکرد' },
+          { key: 'registryStatus', label: 'وضعیت رجیستری و انتقال همتا', type: 'select', options: ['نامشخص', 'رجیستر با انتقال مالکیت فوری', 'بدون انتقال مالکیت / مسافری', 'آکبند / نات‌اکتیو', 'مربوط نیست (لپ‌تاپ/تبلت)'] },
+          { key: 'boxRepair', label: 'جعبه، لوازم و وضعیت بازشدگی', type: 'select', span: 2, options: ['نامشخص', 'جعبه و لوازم کامل، بدون تعمیر', 'بدون جعبه یا بدون فاکتور', 'تعمیری / تعویض قطعه (ال‌سی‌دی یا باتری)'] }
+        ],
+        car: [
+          { key: 'itemModel', label: 'نام خودرو، تیپ و سال ساخت (برای جستجوی باما/دیوار)', type: 'text', span: 2, placeholder: 'مثلاً رانا پلاس مدل 1400 یا پژو 207 پانوراما 1402' },
+          { key: 'carMileage', label: 'کارکرد خودرو (کیلومتر)', type: 'numeric', placeholder: 'مثلاً 65,000' },
+          { key: 'carInsurance', label: 'مهلت بیمه شخص ثالث', type: 'text', placeholder: 'مثلاً 8 ماه' },
+          { key: 'carPaint', label: 'وضعیت رنگ و شاسی', type: 'select', span: 2, options: ['نامشخص', 'بی‌رنگ و شاسی پلمپ', 'یک یا دو لکه رنگ جزئی', 'دوررنگ یا تعویض قطعه بدنه', 'شاسی ضربه‌خورده / جوش‌خورده'] }
+        ],
+        home: [
+          { key: 'itemModel', label: 'برند و مدل دقیق دستگاه (برای مقایسه دیوار/شیپور)', type: 'text', span: 2, placeholder: 'مثلاً ماشین لباسشویی ال‌جی 9 کیلویی یا یخچال اسنوا' },
+          { key: 'usageDuration', label: 'مدت کارکرد تقریبی', type: 'text', placeholder: 'مثلاً 2 سال' },
+          { key: 'homeCondition', label: 'وضعیت سلامت، کارتن و تعمیر', type: 'select', options: ['نامشخص', 'سالم و بدون تعمیر با کارتن', 'سالم ولی بدون کارتن/گارانتی', 'نیازمند سرویس یا تعمیری'] }
+        ],
+        shop: [
+          { key: 'itemModel', label: 'نوع کالا و برند (برای بررسی قیمت بازار)', type: 'text', span: 2, placeholder: 'مثلاً کتونی نایک ایرفورس / ساعت کاسیو / ادکلن' },
+          { key: 'shopReturn', label: 'امکان مرجوعی، تعویض یا پرداخت در محل', type: 'select', span: 2, options: ['نامشخص', 'پرداخت در محل یا ضمانت تعویض دارد', 'ندارد — فقط واریز کامل قبل از ارسال'] }
+        ],
+        other: [
+          { key: 'itemModel', label: 'نام و مدل دقیق کالا (برای استعلام قیمت دیوار/شیپور)', type: 'text', span: 2, placeholder: 'مثلاً دوچرخه ویوا سایز 26 یا پلی‌استیشن 5 اسلیم' },
+          { key: 'otherCondition', label: 'وضعیت ظاهری و فنی', type: 'select', span: 2, options: ['نامشخص', 'در حد نو / کم‌کارکرد', 'کارکرده سالم', 'دارای خط‌وخش یا نقص جزئی'] }
+        ]
+      };
+
       const CALC_CONDITIONS = {
         mobile: [
           { factor: 0.84, label: 'در حد نو / سلامت باتری بالای ۹۵٪ با جعبه و انتقال (افت ۱۵ تا ۱۸٪)' },
@@ -2211,6 +2513,7 @@
         updateProviderUI(state.settings.provider);
         updateModeUI();
         updatePlatformGuide('divar');
+        renderDynamicFields();
         populateCalcConditions('mobile');
         bindEvents();
 
@@ -2652,16 +2955,124 @@
           b.classList.toggle('active', b.dataset.platform === p);
         });
         updatePlatformGuide(p);
+        const rawEl = document.getElementById('rawText');
+        if (rawEl && PLATFORM_PLACEHOLDERS[p]) rawEl.placeholder = PLATFORM_PLACEHOLDERS[p];
         if (p === 'bama') {
           const carChip = document.querySelector('#categoryGroup .chip[data-cat="car"]');
-          if (carChip) selectCategory(carChip);
+          if (carChip) {
+            selectCategory(carChip);
+            return;
+          }
         }
+        renderDynamicFields();
       }
 
       function selectCategory(el) {
         document.querySelectorAll('#categoryGroup .chip').forEach(c => c.classList.remove('active'));
         el.classList.add('active');
         state.category = el.dataset.cat;
+        renderDynamicFields();
+      }
+
+      function renderDynamicFields() {
+        const tag = document.getElementById('dynamicContextTag');
+        if (tag) {
+          tag.textContent = `${PLATFORM_NAMES[state.platform] || state.platform} • ${CATEGORY_NAMES[state.category] || state.category}`;
+        }
+
+        const catWrap = document.getElementById('categoryDynamicWrap');
+        const platWrap = document.getElementById('platformDynamicWrap');
+        if (!catWrap || !platWrap) return;
+
+        renderDynamicGroup(
+          catWrap,
+          `📦 مشخصات تخصصی ${CATEGORY_NAMES[state.category] || 'کالا'}`,
+          CATEGORY_FIELD_SCHEMAS[state.category] || CATEGORY_FIELD_SCHEMAS.other
+        );
+        renderDynamicGroup(
+          platWrap,
+          `🧭 جزئیات بستر ${PLATFORM_NAMES[state.platform] || state.platform}`,
+          PLATFORM_FIELD_SCHEMAS[state.platform] || PLATFORM_FIELD_SCHEMAS.divar
+        );
+      }
+
+      function renderDynamicGroup(container, headingText, fields) {
+        container.textContent = '';
+        const h = document.createElement('div');
+        h.className = 'dynamic-subhead';
+        h.textContent = headingText;
+        container.appendChild(h);
+
+        const grid = document.createElement('div');
+        grid.className = 'dynamic-grid';
+
+        fields.forEach(f => {
+          const wrap = document.createElement('div');
+          wrap.className = `field${f.span === 2 ? ' span-2' : ''}`;
+
+          const inputId = `dyn_${f.key}`;
+          const lbl = document.createElement('label');
+          lbl.setAttribute('for', inputId);
+          lbl.textContent = f.label;
+          wrap.appendChild(lbl);
+
+          let ctrl;
+          if (f.type === 'select') {
+            ctrl = document.createElement('select');
+            ctrl.className = 'input-control';
+            ctrl.id = inputId;
+            (f.options || []).forEach(optText => {
+              const opt = document.createElement('option');
+              opt.value = optText;
+              opt.textContent = optText;
+              ctrl.appendChild(opt);
+            });
+            if (state.details[f.key] && (f.options || []).includes(state.details[f.key])) {
+              ctrl.value = state.details[f.key];
+            } else {
+              state.details[f.key] = ctrl.value;
+            }
+            ctrl.addEventListener('change', () => {
+              state.details[f.key] = ctrl.value;
+            });
+          } else {
+            ctrl = document.createElement('input');
+            ctrl.type = 'text';
+            ctrl.className = 'input-control';
+            ctrl.id = inputId;
+            ctrl.placeholder = f.placeholder || '';
+            if (f.type === 'city') ctrl.setAttribute('list', 'iranCitiesList');
+            if (f.type === 'numeric') ctrl.inputMode = 'numeric';
+            ctrl.value = state.details[f.key] || '';
+            ctrl.addEventListener('input', () => {
+              if (f.type === 'numeric') {
+                const rawDigits = toEnDigits(ctrl.value).replace(/[^\d]/g, '');
+                ctrl.value = rawDigits ? parseInt(rawDigits, 10).toLocaleString('en-US') : '';
+              }
+              state.details[f.key] = ctrl.value.trim();
+            });
+          }
+
+          wrap.appendChild(ctrl);
+          grid.appendChild(wrap);
+        });
+
+        container.appendChild(grid);
+      }
+
+      function collectActiveDetails() {
+        const activeKeys = new Set([
+          ...(CATEGORY_FIELD_SCHEMAS[state.category] || []).map(f => f.key),
+          ...(PLATFORM_FIELD_SCHEMAS[state.platform] || []).map(f => f.key)
+        ]);
+        const out = {};
+        activeKeys.forEach(k => {
+          const val = String(state.details[k] || '').trim();
+          if (val && val !== 'نامشخص' && val !== 'هنوز نپرسیده‌ام' && val !== 'چک نکرده‌ام') {
+            out[k] = val;
+          }
+        });
+        return out;
       }
 
       function toggleFlag(el) {
@@ -2799,6 +3210,7 @@
             state.images.push(processed);
           } catch (_) {}
         }
+        renderDynamicFields();
         renderPreviews();
         document.getElementById('imageInput').value = '';
       }
@@ -3023,6 +3435,7 @@
       }
 
       function buildAnalyzePrompt(p) {
+        const detailLines = Object.entries(p.details || {}).map(([k, v]) => `- ${k}: ${v}`).join('\n') || 'ثبت نشده';
         return `تو کارشناس ارشد ضدکلاهبرداری و معاملات دست‌دوم بازار ایران هستی (متخصص دیوار، شیپور، اینستاگرام، باما و تلگرام).
 اطلاعات پرونده:
 - پلتفرم: ${PLATFORM_NAMES[p.platform] || p.platform}
@@ -3030,6 +3443,8 @@
 - شناسه فروشنده: ${p.sellerId || 'نامشخص'}
 - قیمت پیشنهادی فروشنده: ${p.price || 'نامشخص'} تومان
 - نشانه‌های مشکوک مشاهده‌شده: ${p.quickFlags.length ? p.quickFlags.join(' | ') : 'ثبت نشده'}
+- مشخصات تخصصی فرم:
+${detailLines}
 - متن آگهی / چت / لینک: ${p.rawText || 'ثبت نشده'}
 
 وظایف تو:
@@ -3080,8 +3495,9 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         const sellerId = document.getElementById('sellerId').value.trim();
         const price = toEnDigits(document.getElementById('priceInput').value).trim();
 
-        if (!rawText && state.images.length === 0 && state.selectedFlags.length === 0) {
-          showToast('حداقل متن آگهی، یک نشانه یا یک عکس وارد کنید');
+        const activeDetails = collectActiveDetails();
+        if (!rawText && !activeDetails.itemModel && state.images.length === 0 && state.selectedFlags.length === 0) {
+          showToast('حداقل مدل کالا، متن آگهی، یک نشانه یا یک عکس وارد کنید');
           return;
         }
 
@@ -3105,9 +3521,9 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
 
         const steps = [
           'در حال بررسی سوابق و لیست سیاه مشترک فروشنده...',
-          (isServer || (isGemini && s.geminiSearchGrounding)) ? 'جستجوی زنده قیمت روز و سوابق در گوگل...' : 'تحلیل الگوهای متنی و تله‌های قیمتی...',
-          'بررسی تصاویر و تناقض‌های بصری...',
-          'تولید کارنامه و پیام مچ‌گیری اختصاصی...'
+          (isServer || (isGemini && s.geminiSearchGrounding)) ? 'جستجوی زنده آگهی‌های مشابه در دیوار، شیپور و باما...' : 'تحلیل الگوهای متنی و تله‌های قیمتی...',
+          'مقایسه قیمت فروشنده با عرف واقعی دست‌دوم امروز...',
+          'تولید کارنامه، چک‌لیست و پیام مچ‌گیری اختصاصی...'
         ];
         let stepIdx = 0;
         stepText.textContent = steps[0];
@@ -3127,6 +3543,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
           category: state.category,
           sellerId,
           price,
+          details: activeDetails,
           rawText,
           quickFlags: [...state.selectedFlags],
           images: state.images.map(i => i.base64)
@@ -3180,7 +3597,8 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
             category: state.category,
             sellerId: sellerId || 'ثبت‌نشده',
             price: price || 'نامشخص',
-            excerpt: rawText.slice(0, 85) || 'تحلیل مبتنی بر تصویر/نشانه‌ها',
+            excerpt: (activeDetails.itemModel ? `${activeDetails.itemModel}${rawText ? ' — ' + rawText : ''}` : rawText).slice(0, 95) || 'تحلیل مبتنی بر تصویر/نشانه‌ها',
+            details: activeDetails,
             thumbnails: state.images.map(i => i.thumb),
             sources,
             usedModel: usedModel || 'حالت آفلاین',
@@ -3356,8 +3774,35 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
           red_flags: Array.isArray(raw.red_flags) ? raw.red_flags.map(String) : [],
           green_flags: Array.isArray(raw.green_flags) ? raw.green_flags.map(String) : [],
           verification_message: String(raw.verification_message || ''),
-          checklist: Array.isArray(raw.checklist) ? raw.checklist.map(String) : []
+          checklist: Array.isArray(raw.checklist) ? raw.checklist.map(String) : [],
+          market_comparison: sanitizeMarketComparisonClient(raw.market_comparison)
         };
+      }
+
+      function sanitizeMarketComparisonClient(mc) {
+        if (!mc || typeof mc !== 'object') return null;
+        const comps = Array.isArray(mc.comparables)
+          ? mc.comparables.slice(0, 8).map(c => ({
+              title: String(c?.title || '').slice(0, 85),
+              site: String(c?.site || 'سایر').slice(0, 24),
+              price_text: String(c?.price_text || 'نامشخص').slice(0, 45),
+              condition_note: String(c?.condition_note || '').slice(0, 100),
+              url: sanitizeHttpUrl(c?.url || '')
+            })).filter(c => c.title)
+          : [];
+        const diff = Number(mc.price_diff_percent);
+        const out = {
+          product_detected: String(mc.product_detected || '').slice(0, 85),
+          new_price_range: String(mc.new_price_range || 'نامشخص').slice(0, 85),
+          used_price_range: String(mc.used_price_range || 'نامشخص').slice(0, 85),
+          price_status: String(mc.price_status || 'نامشخص').slice(0, 45),
+          price_diff_percent: Number.isFinite(diff) ? Math.round(diff) : null,
+          comparables: comps
+        };
+        if (!out.comparables.length && out.used_price_range === 'نامشخص' && out.new_price_range === 'نامشخص') {
+          return null;
+        }
+        return out;
       }
 
       function generateSmartDemoAnalysis(p) {
@@ -3378,6 +3823,36 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
           risk += 16;
           redFlags.push(`نشانه پرخطر ثبت‌شده: ${f}`);
         });
+
+        const d = p.details || {};
+        if (d.igNameChanges && d.igNameChanges.includes('۵ بار')) {
+          risk += 24;
+          redFlags.push('تغییر نام کاربری متعدد پیج اینستاگرام (۵ بار یا بیشتر) نشانه بسیار رایج پیج‌های کلاهبرداری است.');
+        }
+        if (d.igComments && d.igComments.includes('بسته')) {
+          risk += 16;
+          redFlags.push('بسته بودن کامنت‌های پیج اینستاگرام مانع دیدن تجربه خریداران قبلی می‌شود.');
+        }
+        if (d.safePay && d.safePay.includes('مخالفت')) {
+          risk += 20;
+          redFlags.push('مخالفت فروشنده با پرداخت امن و اصرار بر کارت‌به‌کارت ریسک معامله را به‌شدت افزایش می‌دهد.');
+        }
+        if (d.registryStatus && d.registryStatus.includes('بدون انتقال')) {
+          risk += 22;
+          redFlags.push('نداشتن انتقال مالکیت همتا باعث قفل شدن آنتن یا ریسک کالای سرقتی می‌شود.');
+        }
+        if (d.carPaint && d.carPaint.includes('شاسی ضربه‌خورده')) {
+          risk += 18;
+          redFlags.push('آسیب شاسی خودرو افت قیمت سنگین دارد و نیازمند بررسی دقیق کارشناسی است.');
+        }
+        if (d.carInspection && d.carInspection.includes('موافق')) {
+          risk -= 10;
+          greenFlags.push('پذیرش کارشناسی رنگ و فنی به انتخاب خریدار نشانه اطمینان‌بخشی است.');
+        }
+        if (d.safePay && d.safePay.includes('موافق')) {
+          risk -= 12;
+          greenFlags.push('پذیرش پرداخت امن ریسک از دست رفتن وجه را به‌شدت کاهش می‌دهد.');
+        }
 
         const traps = [
           { k: ['بیعانه', 'پیش پرداخت', 'پیش‌پرداخت'], m: 'اشاره به دریافت بیعانه در متن آگهی یا چت دیده شد (شایع‌ترین الگوی کلاهبرداری).', w: 22 },
@@ -3587,6 +4062,9 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
           thumbsWrap.style.display = 'none';
         }
 
+        // Live Divar / Sheypoor / Bama Comparables
+        renderComparablesSection(data.market_comparison, data.price);
+
         // Red & Green Flags
         const redList = document.getElementById('redFlagsList');
         redList.textContent = '';
@@ -3652,6 +4130,125 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         if (window.innerWidth < 960) {
           sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+      }
+
+      function renderComparablesSection(mc, sellerPrice) {
+        const card = document.getElementById('comparablesCard');
+        const tag = document.getElementById('compProductTag');
+        const sumGrid = document.getElementById('compSummaryGrid');
+        const listWrap = document.getElementById('compList');
+        if (!card || !sumGrid || !listWrap) return;
+
+        sumGrid.textContent = '';
+        listWrap.textContent = '';
+
+        if (!mc || ((!mc.comparables || !mc.comparables.length) && mc.used_price_range === 'نامشخص' && mc.new_price_range === 'نامشخص')) {
+          card.style.display = 'none';
+          return;
+        }
+
+        card.style.display = 'block';
+        tag.textContent = mc.product_detected || 'استعلام زنده بازار';
+
+        const diffText = Number.isFinite(mc.price_diff_percent)
+          ? ` (${mc.price_diff_percent > 0 ? '+' : ''}${mc.price_diff_percent}٪)`
+          : '';
+        const statusColor = /مشکوک|زیر/.test(mc.price_status || '')
+          ? 'var(--danger-fg)'
+          : /گران/.test(mc.price_status || '')
+            ? 'var(--warning-fg)'
+            : /مناسب|منصفانه|خوش/.test(mc.price_status || '')
+              ? 'var(--success-fg)'
+              : 'var(--accent-cyan)';
+
+        const stats = [
+          { lbl: 'بازه عرف دست‌دوم (دیوار/شیپور)', val: mc.used_price_range || 'نامشخص', color: 'var(--success-fg)' },
+          { lbl: 'بازه قیمت آکبند بازار', val: mc.new_price_range || 'نامشخص', color: 'var(--text-primary)' },
+          { lbl: `ارزیابی قیمت فروشنده (${sellerPrice || 'نامشخص'})`, val: `${mc.price_status || 'نامشخص'}${diffText}`, color: statusColor }
+        ];
+
+        stats.forEach(st => {
+          const box = document.createElement('div');
+          box.className = 'comp-stat';
+          const sm = document.createElement('small');
+          sm.textContent = st.lbl;
+          const strong = document.createElement('strong');
+          strong.style.color = st.color;
+          strong.textContent = st.val;
+          box.appendChild(sm);
+          box.appendChild(strong);
+          sumGrid.appendChild(box);
+        });
+
+        const comps = Array.isArray(mc.comparables) ? mc.comparables : [];
+        if (!comps.length) {
+          const note = document.createElement('div');
+          note.style.cssText = 'font-size:0.76rem; color:var(--text-tertiary); text-align:center; padding:6px;';
+          note.textContent = 'آگهی مشابه لینک‌داری در ۳۰ روز اخیر یافت نشد؛ بازه بالا از منابع زنده برآورد شده است.';
+          listWrap.appendChild(note);
+          return;
+        }
+
+        comps.forEach(c => {
+          const item = document.createElement('div');
+          item.className = 'comp-card';
+
+          const main = document.createElement('div');
+          main.className = 'comp-card-main';
+
+          const top = document.createElement('div');
+          top.className = 'comp-card-top';
+
+          const siteTag = document.createElement('span');
+          const sName = c.site || 'سایر';
+          const siteCls = sName.includes('دیوار')
+            ? 'site-divar'
+            : sName.includes('شیپور')
+              ? 'site-sheypoor'
+              : sName.includes('باما')
+                ? 'site-bama'
+                : 'site-other';
+          siteTag.className = `site-tag ${siteCls}`;
+          siteTag.textContent = sName;
+
+          const titleEl = document.createElement('span');
+          titleEl.className = 'comp-title';
+          titleEl.textContent = c.title || 'آگهی مشابه';
+
+          top.appendChild(siteTag);
+          top.appendChild(titleEl);
+          main.appendChild(top);
+
+          if (c.condition_note) {
+            const noteEl = document.createElement('div');
+            noteEl.className = 'comp-note';
+            noteEl.textContent = c.condition_note;
+            main.appendChild(noteEl);
+          }
+
+          const right = document.createElement('div');
+          right.className = 'comp-right';
+
+          const priceEl = document.createElement('span');
+          priceEl.className = 'comp-price';
+          priceEl.textContent = c.price_text || 'توافقی';
+          right.appendChild(priceEl);
+
+          const safeUrl = sanitizeHttpUrl(c.url);
+          if (safeUrl) {
+            const a = document.createElement('a');
+            a.className = 'comp-link';
+            a.href = safeUrl;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.textContent = 'مشاهده آگهی ↗';
+            right.appendChild(a);
+          }
+
+          item.appendChild(main);
+          item.appendChild(right);
+          listWrap.appendChild(item);
+        });
       }
 
       function renderFollowupThread(list) {
@@ -3774,6 +4371,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         document.getElementById('blacklistAlert').style.display = 'none';
         document.getElementById('cloudCheckBadge').textContent = '';
         state.selectedFlags = [];
+        state.details = {};
         state.images = [];
         state.followupImage = null;
         state.currentReportId = null;
