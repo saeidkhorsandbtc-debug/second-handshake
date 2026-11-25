@@ -1494,7 +1494,10 @@
             <div id="resultSection" class="result-section">
               <div class="card fluent-surface reveal-target">
                 <div class="card-title">
-                  <span>کارنامه نهایی کارشناسی</span>
+                  <span style="display:inline-flex; align-items:center; gap:7px; flex-wrap:wrap;">
+                    کارنامه نهایی کارشناسی
+                    <span id="usedModelBadge" class="pro-badge" style="display:none; direction:ltr;"></span>
+                  </span>
                   <div class="result-toolbar">
                     <button id="exportCardPngBtn" class="btn-secondary" type="button" title="خروجی تصویر کارت گزارش">🖼️ کارت PNG</button>
                     <button id="printReportBtn" class="btn-secondary" type="button" title="چاپ یا ذخیره PDF">🖨️ چاپ/PDF</button>
@@ -1752,11 +1755,23 @@
                 <input type="password" id="geminiApiKeyInput" class="input-control" dir="ltr" placeholder="AIzaSy...">
               </div>
               <div class="field">
-                <label for="geminiModelSelect">مدل هوش مصنوعی</label>
+                <label for="geminiModelSelect">
+                  <span>مدل هوش مصنوعی</span>
+                  <button type="button" id="discoverDirectModelsBtn" class="mini-btn" style="color:var(--accent-cyan);">🔄 کشف مدل‌های کلید</button>
+                </label>
                 <select id="geminiModelSelect" class="input-control" dir="ltr">
-                  <option value="gemini-2.5-flash">gemini-2.5-flash (پیشنهادی - سریع و رایگان)</option>
+                  <option value="gemini-4-hydrogen">gemini-4-hydrogen (جدیدترین مدل رایگان)</option>
+                  <option value="gemini-3.8-flash">gemini-3.8-flash (پرقدرت و سریع)</option>
+                  <option value="gemini-3.6-flash">gemini-3.6-flash (متعادل و پیشنهادی)</option>
+                  <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (بسیار سریع و سبک)</option>
+                  <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite (کم‌تاخیر)</option>
+                  <option value="gemini-3-flash-preview">gemini-3-flash-preview</option>
+                  <option value="gemini-2.5-flash">gemini-2.5-flash (پایدار)</option>
+                  <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite</option>
                   <option value="gemini-2.5-pro">gemini-2.5-pro (تحلیل عمیق‌تر)</option>
                   <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+                  <option value="gemma-4-31b-it">gemma-4-31b-it</option>
+                  <option value="gemma-4-26b-a4b-it">gemma-4-26b-a4b-it</option>
                 </select>
               </div>
             </div>
@@ -1812,10 +1827,12 @@
             <input type="number" id="timeoutSecondsInput" class="input-control" min="5" max="120" value="50">
           </div>
 
-          <div style="display:flex; gap:8px;">
-            <button id="saveSettingsBtn" class="btn-primary" style="padding:11px; flex:1;" type="button">💾 ذخیره تنظیمات</button>
-            <button id="testEngineBtn" class="btn-secondary" type="button">📡 تست موتور آنلاین</button>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <button id="saveSettingsBtn" class="btn-primary" style="padding:11px; flex:1; min-width:150px;" type="button">💾 ذخیره تنظیمات</button>
+            <button id="testEngineBtn" class="btn-secondary" type="button">📡 تست زنده هوش مصنوعی</button>
+            <button id="checkServerModelsBtn" class="btn-secondary" type="button">🔍 مدل‌های فعال سرور</button>
           </div>
+          <div id="engineDiagBox" class="result-box"></div>
         </div>
 
         <!-- Cloud Blacklist Sync Settings -->
@@ -2127,7 +2144,7 @@
           serverBaseUrl: '',
           serverSecretToken: '',
           geminiApiKey: '',
-          geminiModel: 'gemini-2.5-flash',
+          geminiModel: 'gemini-3.6-flash',
           geminiSearchGrounding: true,
           webhookUrl: '',
           webhookAuthMode: 'none', // 'none' | 'body' | 'query' | 'header'
@@ -2372,6 +2389,8 @@
         document.getElementById('webhookAuthMode').addEventListener('change', updateWebhookAuthFields);
         document.getElementById('saveSettingsBtn').addEventListener('click', () => saveSettings(true));
         document.getElementById('testEngineBtn').addEventListener('click', testActiveEngine);
+        document.getElementById('checkServerModelsBtn').addEventListener('click', inspectServerModels);
+        document.getElementById('discoverDirectModelsBtn').addEventListener('click', discoverDirectGeminiModels);
 
         // Lightbox
         const lightboxImg = document.getElementById('lightboxImg');
@@ -2523,7 +2542,15 @@
         document.getElementById('serverBaseUrlInput').value = state.settings.serverBaseUrl || '';
         document.getElementById('serverSecretTokenInput').value = state.settings.serverSecretToken || '';
         document.getElementById('geminiApiKeyInput').value = state.settings.geminiApiKey || '';
-        document.getElementById('geminiModelSelect').value = state.settings.geminiModel || 'gemini-2.5-flash';
+        const modelSel = document.getElementById('geminiModelSelect');
+        const desiredModel = state.settings.geminiModel || 'gemini-3.6-flash';
+        if (!Array.from(modelSel.options).some(o => o.value === desiredModel)) {
+          const opt = document.createElement('option');
+          opt.value = desiredModel;
+          opt.textContent = desiredModel;
+          modelSel.insertBefore(opt, modelSel.firstChild);
+        }
+        modelSel.value = desiredModel;
         document.getElementById('geminiSearchToggle').checked = state.settings.geminiSearchGrounding !== false;
         document.getElementById('webhookUrlInput').value = state.settings.webhookUrl || '';
         document.getElementById('webhookAuthMode').value = state.settings.webhookAuthMode || 'none';
@@ -2863,10 +2890,11 @@
       /* ======================================================================
          7. ONLINE AI ENGINES (GEMINI DIRECT + SEARCH GROUNDING / N8N / MAKE)
          ====================================================================== */
-      async function callGeminiDirect(promptText, base64Images, signal) {
+      async function callGeminiDirect(promptText, base64Images, signal, forceNoSearch = false) {
         const apiKey = state.settings.geminiApiKey;
-        const model = state.settings.geminiModel || 'gemini-2.5-flash';
-        const useSearch = Boolean(state.settings.geminiSearchGrounding);
+        const model = state.settings.geminiModel || 'gemini-3.6-flash';
+        const isGemma = /^gemma/i.test(model);
+        const useSearch = !forceNoSearch && !isGemma && Boolean(state.settings.geminiSearchGrounding);
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
         const parts = [{ text: promptText }];
@@ -2883,7 +2911,7 @@
 
         if (useSearch) {
           body.tools = [{ google_search: {} }];
-        } else {
+        } else if (!isGemma) {
           body.generationConfig.responseMimeType = 'application/json';
         }
 
@@ -2896,15 +2924,30 @@
 
         if (!res.ok) {
           const errText = await res.text().catch(() => '');
-          throw new Error(`HTTP_${res.status}:${errText.slice(0, 100)}`);
+          if (useSearch && (res.status === 400 || res.status === 429)) {
+            return await callGeminiDirect(promptText, base64Images, signal, true);
+          }
+          throw new Error(`HTTP_${res.status}:${errText.slice(0, 140)}`);
         }
 
         const data = await res.json();
         const candidate = data.candidates?.[0];
-        const textOut = candidate?.content?.parts?.map(p => p.text || '').join('\n') || '';
-        const parsedJson = extractJsonSafe(textOut);
+        const textOut = (candidate?.content?.parts || [])
+          .filter(p => !p.thought && typeof p.text === 'string')
+          .map(p => p.text)
+          .join('\n')
+          .trim();
 
-        // Extract verified Google Search grounding links if present
+        let parsedJson;
+        try {
+          parsedJson = extractJsonSafe(textOut);
+        } catch (parseErr) {
+          if (useSearch) {
+            return await callGeminiDirect(promptText, base64Images, signal, true);
+          }
+          throw parseErr;
+        }
+
         const chunks = candidate?.groundingMetadata?.groundingChunks || [];
         const sources = [];
         chunks.forEach(ch => {
@@ -2917,7 +2960,7 @@
           }
         });
 
-        return { parsedJson, sources };
+        return { parsedJson, sources, usedModel: model };
       }
 
       async function callBuiltinServer(payload, signal) {
@@ -3092,10 +3135,12 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         try {
           let result;
           let sources = [];
+          let usedModel = '';
 
           if (isServer) {
             const sRes = await callBuiltinServer(payload, controller.signal);
             result = normalizeAnalysisSchema(sRes);
+            usedModel = String(sRes.usedModel || '');
             if (Array.isArray(sRes.sources)) {
               sources = sRes.sources
                 .map(x => ({ title: String(x.title || x.uri || ''), uri: sanitizeHttpUrl(x.uri || '') }))
@@ -3106,9 +3151,11 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
             const gRes = await callGeminiDirect(prompt, payload.images, controller.signal);
             result = normalizeAnalysisSchema(gRes.parsedJson);
             sources = gRes.sources;
+            usedModel = gRes.usedModel || state.settings.geminiModel;
           } else if (isWebhook) {
             const wRes = await callWebhookProvider(payload, controller.signal);
             result = normalizeAnalysisSchema(wRes);
+            usedModel = String(wRes.usedModel || 'Webhook');
             if (Array.isArray(wRes.sources)) {
               sources = wRes.sources
                 .map(x => ({ title: String(x.title || x.uri || ''), uri: sanitizeHttpUrl(x.uri || '') }))
@@ -3136,6 +3183,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
             excerpt: rawText.slice(0, 85) || 'تحلیل مبتنی بر تصویر/نشانه‌ها',
             thumbnails: state.images.map(i => i.thumb),
             sources,
+            usedModel: usedModel || 'حالت آفلاین',
             followups: [],
             note: '',
             outcome: null,
@@ -3449,6 +3497,14 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         titleEl.textContent = data.verdict || 'نتیجه تحلیل';
         titleEl.style.color = color;
         document.getElementById('verdictSummary').textContent = data.summary || '';
+
+        const modelBadge = document.getElementById('usedModelBadge');
+        if (data.usedModel) {
+          modelBadge.style.display = 'inline-block';
+          modelBadge.textContent = data.usedModel;
+        } else {
+          modelBadge.style.display = 'none';
+        }
 
         // Subscores
         const sc = data.scores || { seller: 50, visual: 50, price: 50, text: 50 };
@@ -4446,33 +4502,70 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
       }
 
       /* ======================================================================
-         14. ENGINE CONNECTION TEST (GEMINI OR WEBHOOK)
+         14. ENGINE CONNECTION TEST & LIVE MODEL DISCOVERY
          ====================================================================== */
       async function testActiveEngine() {
         saveSettings(false);
         const s = state.settings;
+        const diagBox = document.getElementById('engineDiagBox');
         const controller = new AbortController();
-        const tid = setTimeout(() => controller.abort(), 20000);
+        const tid = setTimeout(() => controller.abort(), 30000);
 
         try {
           if (s.provider === 'server') {
             const base = getEffectiveServerBase();
             if (!base) return showToast('آدرس سرور Render را وارد کنید یا فایل را روی سرور اجرا کنید');
-            showToast('در حال تست سلامت و احراز هویت سرور اختصاصی...');
+            renderAlertBox(diagBox, 'warn', '⏳ در حال تست کامل سرور و هوش مصنوعی...', base, [
+              'گام ۱: بررسی سلامت سرور (/healthz)',
+              'گام ۲: ارسال تست واقعی به مدل هوش مصنوعی (/api/test-gemini)'
+            ]);
+
             const hRes = await fetch(`${base}/healthz`, { signal: controller.signal });
             if (!hRes.ok) throw new Error(`HTTP_${hRes.status}`);
             const hData = await hRes.json();
-            await callBuiltinServer({ test: true, source: 'separ_kharid_pro_v4', timestamp: Date.now() }, controller.signal);
-            state.serverStatus = hData.geminiConfigured ? 'online' : 'no_key';
-            updateModeUI();
-            if (hData.geminiConfigured) {
-              showToast(`✅ سرور آنلاین و آماده است (مدل: ${hData.model || 'gemini'})`);
+
+            if (!hData.geminiConfigured) {
+              state.serverStatus = 'no_key';
+              updateModeUI();
+              renderAlertBox(diagBox, 'danger', '⚠️ کلید GEMINI_API_KEY در پنل Render تنظیم نشده است', base, [
+                'سرور Node.js سالم است اما کلید API در Environment Variables سرور خالی است.'
+              ]);
+              return;
+            }
+
+            // تست واقعی هوش مصنوعی از طریق مسیر جدید server.js v3
+            const testUrl = new URL(`${base}/api/test-gemini`);
+            if (s.serverSecretToken) testUrl.searchParams.set('token', s.serverSecretToken);
+            const gRes = await fetch(testUrl.toString(), { signal: controller.signal });
+            const gText = await gRes.text();
+
+            // اگر سرور هنوز نسخه قدیمی باشد، HTML برمی‌گرداند
+            if (gText.trim().startsWith('<!DOCTYPE') || gText.trim().startsWith('<html')) {
+              renderAlertBox(diagBox, 'warn', '⚠️ سرور هنوز با نسخه قدیمی server.js اجرا می‌شود', base, [
+                'مسیر /api/test-gemini در سرور فعلی وجود ندارد.',
+                'مطمئن شوید فایل جدید با نام دقیق server.js (نه server_3.js) در گیت‌هاب جایگزین و دیپلوی شده باشد.'
+              ]);
+              return;
+            }
+
+            const gData = extractJsonSafe(gText);
+            if (gRes.ok && gData.ok) {
+              state.serverStatus = 'online';
+              updateModeUI();
+              renderAlertBox(diagBox, 'safe', '✅ اتصال سرور و هوش مصنوعی ۱۰۰٪ سالم است!', `مدل فعال پاسخ‌گو: ${gData.usedModel || hData.model || 'auto'}`, [
+                `نسخه سرور: ${hData.version || 'v3'}`,
+                'سرور آماده کارشناسی تصاویر، متن و چت پیگیری است.'
+              ]);
+              showToast(`✅ هوش مصنوعی متصل است (${gData.usedModel || 'OK'})`);
             } else {
-              showToast('⚠️ سرور متصل شد اما متغیر GEMINI_API_KEY در پنل Render تنظیم نشده است!');
+              renderAlertBox(diagBox, 'danger', '🚨 سرور وصل شد اما گوگل خطا داد', gData.readableError || 'خطای 502', [
+                `جزئیات خام گوگل: ${gData.rawError || gData.error || 'نامشخص'}`
+              ]);
+              showToast(gData.readableError || 'خطا در اتصال سرور به جمینی');
             }
           } else if (s.provider === 'gemini') {
             if (!s.geminiApiKey) return showToast('ابتدا کلید API جمینی را وارد کنید');
-            showToast('در حال تست اتصال مستقیم به Gemini API...');
+            renderAlertBox(diagBox, 'warn', '⏳ در حال تست مستقیم Gemini API...', s.geminiModel, ['در حال ارسال درخواست آزمایشی به گوگل...']);
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(s.geminiModel)}:generateContent?key=${encodeURIComponent(s.geminiApiKey)}`;
             const res = await fetch(url, {
               method: 'POST',
@@ -4480,33 +4573,102 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
               body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: 'فقط کلمه OK را برگردان.' }] }] }),
               signal: controller.signal
             });
-            if (res.ok) showToast('✅ اتصال مستقیم به Gemini API با موفقیت برقرار شد!');
-            else showToast(`⚠️ خطای Gemini API: کد ${res.status} (کلید یا IP را بررسی کنید)`);
+            if (res.ok) {
+              renderAlertBox(diagBox, 'safe', '✅ اتصال مستقیم به Gemini API برقرار است!', `مدل: ${s.geminiModel}`, ['کلید API و مدل انتخابی پاسخ‌گو هستند.']);
+              showToast('✅ اتصال مستقیم به Gemini API برقرار شد');
+            } else {
+              const errTxt = await res.text().catch(() => '');
+              renderAlertBox(diagBox, 'danger', `⚠️ خطای Gemini API (کد ${res.status})`, s.geminiModel, [errTxt.slice(0, 180) || 'کلید، مدل یا IP را بررسی کنید.']);
+              showToast(`⚠️ خطای Gemini API: کد ${res.status}`);
+            }
           } else if (s.provider === 'webhook') {
             if (!s.webhookUrl) return showToast('ابتدا لینک Webhook را وارد کنید');
-            showToast('در حال ارسال پینگ تست به n8n / Make.com...');
-            await callWebhookProvider({ test: true, source: 'separ_kharid_pro_v3', timestamp: Date.now() }, controller.signal)
+            renderAlertBox(diagBox, 'warn', '⏳ در حال پینگ Webhook...', s.webhookUrl, ['در حال ارسال درخواست تست...']);
+            await callWebhookProvider({ test: true, source: 'separ_kharid_pro_v4', timestamp: Date.now() }, controller.signal)
               .catch(err => {
-                if (err instanceof SyntaxError) return { ok: true }; // Plain text "Accepted" from webhook
+                if (err instanceof SyntaxError) return { ok: true };
                 throw err;
               });
-            showToast('✅ اتصال به Webhook با موفقیت برقرار شد!');
+            renderAlertBox(diagBox, 'safe', '✅ اتصال به Webhook برقرار شد!', s.webhookUrl, ['وب‌هوک پاسخ ۲00 برگرداند.']);
+            showToast('✅ اتصال به Webhook برقرار شد');
           } else {
-            showToast('حالت آفلاین انتخاب شده است؛ برای تست آنلاین Gemini یا Webhook را انتخاب کنید');
+            showToast('حالت آفلاین انتخاب شده است؛ برای تست آنلاین یکی از موتورهای بالا را انتخاب کنید');
           }
         } catch (err) {
-          if (err.name === 'AbortError') {
-            showToast('⏱️ زمان تست اتصال (۲۰ ثانیه) به پایان رسید (ممکن است سرور Render در حال بیدار شدن باشد؛ دوباره تست کنید)');
-          } else if (String(err.message).startsWith('HTTP_')) {
-            const parts = String(err.message).split(':');
-            const code = parts[0].replace('HTTP_', '');
-            const detail = parts.slice(1).join(':').trim();
-            showToast(detail ? `⚠️ ${detail} (کد ${code})` : `⚠️ خطای سرور با کد ${code}`);
-          } else {
-            showToast('❌ خطا در اتصال به سرور (آدرس، CORS یا وضعیت آنلاین بودن سرور را بررسی کنید)');
-          }
+          const msg = err.name === 'AbortError'
+            ? 'زمان انتظار (۳۰ ثانیه) به پایان رسید — ممکن است سرور Render در حال بیدار شدن باشد؛ ۱۰ ثانیه بعد دوباره تست کنید.'
+            : String(err.message || 'خطا در اتصال به سرور');
+          renderAlertBox(diagBox, 'danger', '❌ خطا در تست موتور آنلاین', '', [msg]);
+          showToast('❌ خطا در تست اتصال');
         } finally {
           clearTimeout(tid);
+        }
+      }
+
+      async function inspectServerModels() {
+        saveSettings(false);
+        const base = getEffectiveServerBase();
+        const diagBox = document.getElementById('engineDiagBox');
+        if (!base) return showToast('آدرس سرور Render را وارد کنید');
+
+        renderAlertBox(diagBox, 'warn', '⏳ در حال دریافت لیست واقعی مدل‌های فعال از سرور...', `${base}/api/models`, ['استعلام زنده از API گوگل روی کلید سرور...']);
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 20000);
+        try {
+          const url = new URL(`${base}/api/models`);
+          if (state.settings.serverSecretToken) url.searchParams.set('token', state.settings.serverSecretToken);
+          const res = await fetch(url.toString(), { signal: controller.signal });
+          const txt = await res.text();
+          if (txt.trim().startsWith('<!DOCTYPE') || txt.trim().startsWith('<html')) {
+            renderAlertBox(diagBox, 'warn', '⚠️ نسخه سرور روی Render قدیمی است', base, [
+              'مسیر /api/models پیدا نشد. لطفاً server.js نسخه جدید را جایگزین کنید.'
+            ]);
+            return;
+          }
+          const data = extractJsonSafe(txt);
+          if (res.ok && data.ok) {
+            const topList = (data.models || []).slice(0, 12);
+            renderAlertBox(diagBox, 'safe', `✅ ${data.count} مدل فعال روی کلید سرور پیدا شد`, `مدل پیشنهادی خودکار: ${data.recommended || '—'}`, [
+              `مدل‌های برتر: ${topList.join('  •  ')}`
+            ]);
+            showToast(`✅ ${data.count} مدل فعال شناسایی شد`);
+          } else {
+            renderAlertBox(diagBox, 'danger', '❌ خطا در دریافت لیست مدل‌ها', data.readableError || '', [data.rawError || data.error || 'خطای نامشخص']);
+          }
+        } catch (err) {
+          renderAlertBox(diagBox, 'danger', '❌ عدم دسترسی به سرور', '', [err.name === 'AbortError' ? 'تایم‌اوت سرور' : String(err.message)]);
+        } finally {
+          clearTimeout(tid);
+        }
+      }
+
+      async function discoverDirectGeminiModels() {
+        const apiKey = document.getElementById('geminiApiKeyInput').value.trim();
+        if (!apiKey) return showToast('ابتدا کلید API جمینی را وارد کنید');
+        showToast('در حال کشف مدل‌های فعال روی کلید شما...');
+        try {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}&pageSize=100`);
+          if (!res.ok) throw new Error(`HTTP_${res.status}`);
+          const data = await res.json();
+          const models = (data.models || [])
+            .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
+            .map(m => String(m.name || '').replace(/^models\//, ''))
+            .filter(id => id && !/(embedding|tts|imagen|veo|aqa|audio)/i.test(id));
+
+          if (!models.length) return showToast('مدل چتی فعالی پیدا نشد');
+          const sel = document.getElementById('geminiModelSelect');
+          sel.textContent = '';
+          models.forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = m;
+            sel.appendChild(opt);
+          });
+          state.settings.geminiModel = models[0];
+          saveSettings(false);
+          showToast(`✅ ${models.length} مدل واقعی در لیست بارگذاری شد`);
+        } catch (_) {
+          showToast('❌ خطا در دریافت لیست مدل‌ها (کلید API یا فیلترشکن را چک کنید)');
         }
       }
     })();
