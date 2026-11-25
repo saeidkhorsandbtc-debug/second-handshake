@@ -1179,54 +1179,55 @@
 
     .edit-modal-card { width: 100%; max-width: 440px; padding: 20px; }
 
-    /* Bottom Navigation */
+    /* Native App Floating Dock Navigation (Mobile) */
     .bottom-nav {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: calc(10px + env(safe-area-inset-bottom));
+      left: 12px;
+      right: 12px;
       z-index: 60;
-      background: var(--acrylic-header);
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
-      border-top: 1px solid var(--stroke-subtle);
-      padding-bottom: env(safe-area-inset-bottom);
+      max-width: 520px;
+      margin: 0 auto;
+      border-radius: 22px;
+      background: var(--acrylic-elevated);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--stroke-luminous);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      padding: 5px;
     }
 
     .nav-inner {
-      max-width: 560px;
-      margin: 0 auto;
-      height: var(--nav-mobile-h);
+      height: 58px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
     }
 
     .nav-btn {
-      background: none;
-      border: none;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 16px;
       color: var(--text-tertiary);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      font-size: 0.7rem;
+      gap: 3px;
+      font-size: 0.68rem;
       font-weight: 700;
       cursor: pointer;
       position: relative;
-      transition: color 0.18s var(--fluent-ease);
+      touch-action: manipulation;
+      transition: all 0.2s var(--fluent-ease);
     }
 
-    .nav-btn.active { color: var(--accent-cyan); }
+    .nav-btn:active { transform: scale(0.92); }
 
-    .nav-btn.active::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      width: 28px;
-      height: 3px;
-      border-radius: 0 0 6px 6px;
-      background: var(--accent-cyan);
+    .nav-btn.active {
+      color: var(--accent-cyan);
+      background: var(--accent-subtle);
+      border-color: rgba(40, 153, 245, 0.32);
     }
 
     .nav-badge {
@@ -1601,6 +1602,399 @@
       height: auto;
     }
 
+    /* ==========================================================================
+       NATIVE APP BENTO TILES, 10-CATEGORY GRID & SUBCATEGORY DRAWER
+       ========================================================================== */
+    body {
+      overscroll-behavior-y: contain;
+      padding-bottom: calc(92px + env(safe-area-inset-bottom));
+    }
+
+    button, .chip, .tile-card, .subcat-pill {
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* App Bento Quick-Launch Grid */
+    .bento-hero {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .bento-hero {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 9px;
+      }
+    }
+
+    .bento-tile {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 13px 13px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--stroke-card);
+      background: var(--acrylic-bg);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      box-shadow: inset 0 1px 0 0 var(--stroke-luminous), var(--shadow-card);
+      color: var(--text-primary);
+      cursor: pointer;
+      text-align: right;
+      overflow: hidden;
+      transition: transform 0.18s var(--fluent-ease), border-color 0.2s var(--fluent-ease), box-shadow 0.2s var(--fluent-ease);
+    }
+
+    .bento-tile:hover {
+      transform: translateY(-2px);
+      border-color: var(--tile-accent, var(--accent-cyan));
+    }
+
+    .bento-tile:active {
+      transform: scale(0.96);
+    }
+
+    .bento-tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 0% 0%, var(--tile-glow, rgba(40,153,245,0.16)), transparent 65%);
+      pointer-events: none;
+    }
+
+    .bento-tile-top {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+
+    .bento-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: var(--tile-icon-bg, var(--accent-subtle));
+      color: var(--tile-accent, var(--accent-cyan));
+      border: 1px solid var(--tile-icon-bd, rgba(40, 153, 245, 0.3));
+    }
+
+    .bento-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: var(--control-bg);
+      color: var(--tile-accent, var(--accent-cyan));
+      border: 1px solid var(--stroke-subtle);
+    }
+
+    .bento-tile strong {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 800;
+      z-index: 2;
+    }
+
+    .bento-tile span {
+      display: block;
+      font-size: 0.69rem;
+      color: var(--text-tertiary);
+      line-height: 1.4;
+      z-index: 2;
+    }
+
+    /* 10-Category App Tile Grid */
+    .cat-tile-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 680px) {
+      .cat-tile-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+    }
+
+    .cat-tile {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 6px;
+      padding: 11px 6px 10px;
+      border-radius: 14px;
+      background: var(--control-bg);
+      border: 1.5px solid var(--stroke-subtle);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s var(--fluent-ease);
+      overflow: hidden;
+    }
+
+    @media (max-width: 680px) {
+      .cat-tile {
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: right;
+        padding: 9px 10px;
+        gap: 9px;
+      }
+    }
+
+    .cat-tile:hover {
+      background: var(--control-hover);
+      color: var(--text-primary);
+      border-color: var(--cat-color, var(--accent-cyan));
+    }
+
+    .cat-tile:active {
+      transform: scale(0.95);
+    }
+
+    .cat-tile.active {
+      background: linear-gradient(145deg, var(--cat-bg, var(--accent-subtle)), var(--control-bg));
+      border-color: var(--cat-color, var(--accent-cyan));
+      color: var(--text-primary);
+      box-shadow: 0 5px 16px var(--cat-glow, rgba(0, 120, 212, 0.2));
+    }
+
+    .cat-tile-ico {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      background: var(--cat-bg, var(--accent-subtle));
+      color: var(--cat-color, var(--accent-cyan));
+      border: 1px solid var(--cat-bd, rgba(40, 153, 245, 0.25));
+    }
+
+    .cat-tile-text {
+      min-width: 0;
+    }
+
+    .cat-tile-title {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      line-height: 1.3;
+      color: inherit;
+    }
+
+    .cat-tile-sub {
+      display: block;
+      font-size: 0.63rem;
+      color: var(--text-tertiary);
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Subcategory Expandable App Tray */
+    .subcat-tray {
+      background: var(--control-bg);
+      border: 1px solid var(--stroke-card);
+      border-radius: 14px;
+      padding: 11px 12px;
+      margin-bottom: 14px;
+      animation: fluentEnter 0.24s var(--fluent-decelerate);
+    }
+
+    .subcat-tray-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 9px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .subcat-tray-head small {
+      font-size: 0.69rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .subcat-groups-wrap {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    @media (max-width: 560px) {
+      .subcat-groups-wrap { grid-template-columns: 1fr; }
+    }
+
+    .subcat-group-box {
+      background: var(--acrylic-bg);
+      border: 1px solid var(--stroke-subtle);
+      border-radius: 11px;
+      padding: 8px 9px;
+    }
+
+    .subcat-group-title {
+      font-size: 0.71rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      margin-bottom: 6px;
+    }
+
+    .subcat-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .subcat-pill {
+      background: var(--control-bg);
+      border: 1px solid var(--stroke-subtle);
+      color: var(--text-secondary);
+      padding: 5px 10px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.16s var(--fluent-ease);
+    }
+
+    .subcat-pill:hover {
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+
+    .subcat-pill:active { transform: scale(0.95); }
+
+    .subcat-pill.active {
+      background: var(--accent-primary);
+      border-color: var(--accent-cyan);
+      color: #fff;
+      box-shadow: 0 3px 10px var(--accent-glow);
+    }
+
+    /* Tools Bento App Switcher (Tab 3) */
+    .tools-launcher-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 9px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 720px) {
+      .tools-launcher-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .tool-launch-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+      padding: 12px 8px;
+      border-radius: 15px;
+      border: 1.5px solid var(--stroke-card);
+      background: var(--acrylic-bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s var(--fluent-ease);
+      box-shadow: inset 0 1px 0 var(--stroke-luminous), var(--shadow-card);
+    }
+
+    .tool-launch-tile:hover {
+      border-color: var(--t-color, var(--accent-cyan));
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    .tool-launch-tile:active { transform: scale(0.95); }
+
+    .tool-launch-tile.active {
+      background: linear-gradient(145deg, var(--t-bg, var(--accent-subtle)), var(--acrylic-bg));
+      border-color: var(--t-color, var(--accent-cyan));
+      color: var(--text-primary);
+      box-shadow: 0 6px 18px var(--t-glow, rgba(0, 120, 212, 0.22));
+    }
+
+    .tool-launch-ico {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: var(--t-bg, var(--accent-subtle));
+      color: var(--t-color, var(--accent-cyan));
+      font-size: 1.05rem;
+    }
+
+    .tool-launch-tile strong {
+      font-size: 0.76rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .tool-launch-tile span {
+      font-size: 0.65rem;
+      color: var(--text-tertiary);
+    }
+
+    .tool-panel { display: none; }
+    .tool-panel.active { display: block; animation: fluentEnter 0.25s var(--fluent-decelerate); }
+    .tools-grid.show-all .tool-panel { display: block; }
+
+    /* Mobile Bottom-Sheet Modal Feel */
+    @media (max-width: 640px) {
+      #editCaseModal {
+        align-items: flex-end;
+        padding: 0;
+      }
+      #editCaseModal .edit-modal-card {
+        max-width: 100%;
+        border-radius: 24px 24px 0 0;
+        padding-bottom: calc(22px + env(safe-area-inset-bottom));
+        animation: sheetUp 0.26s var(--fluent-decelerate);
+      }
+      #editCaseModal .edit-modal-card::before {
+        content: '';
+        display: block;
+        width: 42px;
+        height: 4px;
+        border-radius: 99px;
+        background: var(--text-disabled);
+        opacity: 0.45;
+        margin: -6px auto 14px;
+      }
+    }
+
+    @keyframes sheetUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    /* Slim native scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--stroke-card); border-radius: 99px; }
+
     /* Print / PDF */
     @media print {
       body { background: #fff !important; color: #000 !important; padding: 0 !important; }
@@ -1690,6 +2084,61 @@
     <main>
       <!-- ==================== TAB 1: ANALYZER ==================== -->
       <section id="tab-analyze" class="tab-pane active" role="tabpanel">
+        <!-- App Bento Quick-Launch Tiles -->
+        <div class="bento-hero" aria-label="میانبرهای سریع اپلیکیشن">
+          <button type="button" id="bentoAutofillTile" class="bento-tile reveal-target" style="--tile-accent:#38bdf8; --tile-glow:rgba(56,189,248,0.18); --tile-icon-bg:rgba(56,189,248,0.14); --tile-icon-bd:rgba(56,189,248,0.34);">
+            <div class="bento-tile-top">
+              <div class="bento-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M4 7V5a2 2 0 0 1 2-2h2"/><path d="M16 3h2a2 2 0 0 1 2 2v2"/><path d="M20 17v2a2 2 0 0 1-2 2h-2"/><path d="M8 21H6a2 2 0 0 1-2-2v-2"/><rect x="8" y="8" width="8" height="8" rx="1.5"/></svg>
+              </div>
+              <span class="bento-badge">هوشمند</span>
+            </div>
+            <div>
+              <strong>اسکن اسکرین‌شات</strong>
+              <span>پرکردن خودکار فرم از عکس</span>
+            </div>
+          </button>
+
+          <button type="button" id="bentoReceiptTile" class="bento-tile reveal-target" style="--tile-accent:#f59e0b; --tile-glow:rgba(245,158,11,0.18); --tile-icon-bg:rgba(245,158,11,0.14); --tile-icon-bd:rgba(245,158,11,0.34);">
+            <div class="bento-tile-top">
+              <div class="bento-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M8 7h8"/><path d="M8 11h8"/><path d="M8 15h5"/></svg>
+              </div>
+              <span class="bento-badge">فروشنده</span>
+            </div>
+            <div>
+              <strong>تشخیص فیش جعلی</strong>
+              <span>جرم‌شناسی رسید بانکی</span>
+            </div>
+          </button>
+
+          <button type="button" id="bentoToolsTile" class="bento-tile reveal-target" style="--tile-accent:#10b981; --tile-glow:rgba(16,185,129,0.18); --tile-icon-bg:rgba(16,185,129,0.14); --tile-icon-bd:rgba(16,185,129,0.34);">
+            <div class="bento-tile-top">
+              <div class="bento-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12h6"/><path d="M12 9v6"/></svg>
+              </div>
+              <span class="bento-badge">آفلاین</span>
+            </div>
+            <div>
+              <strong>لینک، کارت و شبا</strong>
+              <span>ضدفیشینگ و صورت‌جلسه</span>
+            </div>
+          </button>
+
+          <button type="button" id="bentoHistoryTile" class="bento-tile reveal-target" style="--tile-accent:#a855f7; --tile-glow:rgba(168,85,247,0.18); --tile-icon-bg:rgba(168,85,247,0.14); --tile-icon-bd:rgba(168,85,247,0.34);">
+            <div class="bento-tile-top">
+              <div class="bento-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+              </div>
+              <span id="bentoStatsBadge" class="bento-badge">۰ پرونده</span>
+            </div>
+            <div>
+              <strong>آرشیو و لیست سیاه</strong>
+              <span id="bentoScamCount">۰ کلاهبردار ثبت‌شده</span>
+            </div>
+          </button>
+        </div>
+
         <div class="analyzer-grid">
           <!-- Form Column -->
           <div id="analyzerFormCol">
@@ -1722,12 +2171,21 @@
                 </button>
               </div>
 
-              <div class="chip-group" id="categoryGroup" role="radiogroup" aria-label="دسته‌بندی کالا">
-                <button type="button" class="chip active" data-cat="mobile">📱 موبایل و دیجیتال</button>
-                <button type="button" class="chip" data-cat="car">🚗 خودرو و موتور</button>
-                <button type="button" class="chip" data-cat="home">🏠 لوازم خانگی</button>
-                <button type="button" class="chip" data-cat="shop">🛍️ پوشاک / آنلاین‌شاپ</button>
-                <button type="button" class="chip" data-cat="other">📦 سایر</button>
+              <div class="field" style="margin-bottom:10px;">
+                <label>
+                  <span>انتخاب دسته‌بندی (تمام ۱۰ دسته دیوار)</span>
+                  <span id="selectedCatSummary" style="color:var(--accent-cyan); font-size:0.72rem;">کالای دیجیتال</span>
+                </label>
+                <div class="cat-tile-grid" id="categoryGroup" role="radiogroup" aria-label="دسته‌بندی آگهی"></div>
+              </div>
+
+              <!-- Subcategory Interactive Tray -->
+              <div id="subcatTray" class="subcat-tray" style="display:none;">
+                <div class="subcat-tray-head">
+                  <span id="subcatTrayTitle">زیردسته‌ها</span>
+                  <small id="subcatSelectedTag">انتخاب نشده</small>
+                </div>
+                <div id="subcatTrayBody"></div>
               </div>
 
               <div class="autofill-bar">
@@ -1753,7 +2211,7 @@
                 </div>
                 <div class="field">
                   <label for="priceInput">
-                    <span>قیمت پیشنهادی</span>
+                    <span id="priceFieldLabel">قیمت پیشنهادی</span>
                     <span id="priceHint" class="price-hint">تومان</span>
                   </label>
                   <input type="text" id="priceInput" class="input-control" inputmode="numeric" placeholder="مثلاً 24,500,000">
@@ -2012,9 +2470,42 @@
 
       <!-- ==================== TAB 3: ANTI-SCAM TOOLKIT ==================== -->
       <section id="tab-tools" class="tab-pane" role="tabpanel">
-        <div class="tools-grid">
+        <!-- Bento Tools App Launcher -->
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:8px;">
+          <strong style="font-size:0.9rem;">🧰 جعبه‌ابزار هوشمند معاملات امن</strong>
+          <button type="button" id="toggleAllToolsBtn" class="mini-btn" style="color:var(--accent-cyan);">نمایش همه ابزارها</button>
+        </div>
+        <div class="tools-launcher-grid" id="toolsLauncherGrid">
+          <button type="button" class="tool-launch-tile active" data-tool="receipt" style="--t-color:#f59e0b; --t-bg:rgba(245,158,11,0.14); --t-glow:rgba(245,158,11,0.22);">
+            <div class="tool-launch-ico">🧾</div>
+            <strong>تشخیص فیش جعلی</strong>
+            <span>حالت فروشنده</span>
+          </button>
+          <button type="button" class="tool-launch-tile" data-tool="phishing" style="--t-color:#ef4444; --t-bg:rgba(239,68,68,0.14); --t-glow:rgba(239,68,68,0.22);">
+            <div class="tool-launch-ico">🛡️</div>
+            <strong>اسکنر لینک جعلی</strong>
+            <span>درگاه و فیشینگ</span>
+          </button>
+          <button type="button" class="tool-launch-tile" data-tool="card" style="--t-color:#38bdf8; --t-bg:rgba(56,189,248,0.14); --t-glow:rgba(56,189,248,0.22);">
+            <div class="tool-launch-ico">💳</div>
+            <strong>کارت بانکی و شبا</strong>
+            <span>Luhn + بانک</span>
+          </button>
+          <button type="button" class="tool-launch-tile" data-tool="price" style="--t-color:#10b981; --t-bg:rgba(16,185,129,0.14); --t-glow:rgba(16,185,129,0.22);">
+            <div class="tool-launch-ico">💰</div>
+            <strong>قیمت منصفانه</strong>
+            <span>نشانگر زنده تله</span>
+          </button>
+          <button type="button" class="tool-launch-tile" data-tool="agreement" style="--t-color:#a855f7; --t-bg:rgba(168,85,247,0.14); --t-glow:rgba(168,85,247,0.22);">
+            <div class="tool-launch-ico">📝</div>
+            <strong>صورت‌جلسه تحویل</strong>
+            <span>PNG و چاپ PDF</span>
+          </button>
+        </div>
+
+        <div class="tools-grid" id="toolsGridWrap">
           <!-- 0. Seller Mode: Fake Payment Receipt Forensic Detector -->
-          <div class="card fluent-surface reveal-target full-span">
+          <div class="card fluent-surface reveal-target full-span tool-panel active" data-tool-panel="receipt">
             <div class="card-title">
               <span>🧾 حالت فروشنده: تشخیص فیش واریز بانکی جعلی</span>
               <small>تحلیل میکروسکوپی رسید آپ / همراه‌بانک / بلوبانک</small>
@@ -2052,7 +2543,7 @@
           </div>
 
           <!-- 1. Advanced Phishing & URL Inspector -->
-          <div class="card fluent-surface reveal-target">
+          <div class="card fluent-surface reveal-target full-span tool-panel" data-tool-panel="phishing">
             <div class="card-title">
               <span>🛡️ اسکنر پیشرفته لینک فیشینگ و درگاه</span>
               <small>آفلاین و آنی</small>
@@ -2068,7 +2559,7 @@
           </div>
 
           <!-- 2. Iranian Bank Card (Luhn) & IBAN (Sheba) Validator -->
-          <div class="card fluent-surface reveal-target">
+          <div class="card fluent-surface reveal-target full-span tool-panel" data-tool-panel="card">
             <div class="card-title">
               <span>💳 اعتبارسنج کارت بانکی (Luhn) و شبا</span>
               <small>تشخیص خودکار بانک</small>
@@ -2084,7 +2575,7 @@
           </div>
 
           <!-- 3. Category-Based Fair Price Estimator with Live Marker -->
-          <div class="card fluent-surface reveal-target full-span">
+          <div class="card fluent-surface reveal-target full-span tool-panel" data-tool-panel="price">
             <div class="card-title">
               <span>💰 محاسبه‌گر هوشمند قیمت منصفانه با نشانگر زنده</span>
               <small>تشخیص تله قیمتی</small>
@@ -2117,7 +2608,7 @@
           </div>
 
           <!-- 4. Handover & Test-Period Agreement Generator -->
-          <div class="card fluent-surface reveal-target full-span">
+          <div class="card fluent-surface reveal-target full-span tool-panel" data-tool-panel="agreement">
             <div class="card-title">
               <span>📝 صدور صورت‌جلسه تحویل کالا و مهلت تست دست‌دوم</span>
               <small>۱۰۰٪ آفلاین • خروجی رسمی PNG و چاپ PDF</small>
@@ -2512,6 +3003,14 @@
         return JSON.parse(cleaned);
       }
 
+      function safeParseServerError(rawText, status) {
+        try {
+          const obj = extractJsonSafe(rawText);
+          if (obj && obj.error) return String(obj.error);
+        } catch (_) {}
+        return `HTTP_${status}`;
+      }
+
       /* ======================================================================
          2. INDEXEDDB PERSISTENCE LAYER
          ====================================================================== */
@@ -2613,6 +3112,7 @@
       const state = {
         platform: 'divar',
         category: 'mobile',
+        subcategory: 'موبایل و تبلت',
         details: {},
         selectedFlags: [],
         images: [], // { base64, preview, thumb, kb }
@@ -2661,11 +3161,175 @@
       };
 
       const CATEGORY_NAMES = {
-        mobile: 'موبایل و دیجیتال',
-        car: 'خودرو و موتورسیکلت',
-        home: 'لوازم خانگی',
-        shop: 'پوشاک و آنلاین‌شاپ',
-        other: 'سایر کالاها'
+        real_estate: 'املاک',
+        car: 'وسایل نقلیه',
+        mobile: 'کالای دیجیتال',
+        home: 'خانه و آشپزخانه',
+        services: 'خدمات',
+        shop: 'وسایل شخصی',
+        entertainment: 'سرگرمی و فراغت',
+        social: 'اجتماعی',
+        industrial: 'تجهیزات و صنعتی',
+        jobs: 'استخدام و کاریابی',
+        other: 'سایر'
+      };
+
+      const CATEGORY_CATALOG = [
+        {
+          id: 'real_estate',
+          title: 'املاک',
+          sub: 'فروش، اجاره، ویلا',
+          priceLabel: 'قیمت کل / اجاره ماهانه',
+          color: '#10b981', bg: 'rgba(16,185,129,0.14)', bd: 'rgba(16,185,129,0.34)', glow: 'rgba(16,185,129,0.22)',
+          icon: '<path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9h.01"/><path d="M9 13h.01"/><path d="M9 17h.01"/>',
+          subGroups: [
+            { group: 'اجاره مسکونی', items: ['آپارتمان', 'خانه و ویلا'] },
+            { group: 'فروش مسکونی', items: ['آپارتمان', 'خانه و ویلا', 'زمین و ملک کلنگی'] },
+            { group: 'فروش اداری و تجاری', items: ['دفتر کار، اتاق اداری، مطب', 'مغازه و غرفه', 'صنعتی، کشاورزی، تجاری'] },
+            { group: 'اجاره اداری و تجاری', items: ['دفتر کار، اتاق اداری، مطب', 'مغازه و غرفه', 'صنعتی، کشاورزی، تجاری'] },
+            { group: 'پروژه‌های ساخت‌وساز', items: ['مشارکت در ساخت', 'پیش‌فروش'] },
+            { group: 'اجاره کوتاه‌مدت', items: ['آپارتمان و سوئیت', 'ویلا و باغ', 'دفتر کار و فضای آموزشی'] }
+          ]
+        },
+        {
+          id: 'car',
+          title: 'وسایل نقلیه',
+          sub: 'خودرو، موتور، قطعات',
+          priceLabel: 'قیمت پیشنهادی خودرو/موتور',
+          color: '#3b82f6', bg: 'rgba(59,130,246,0.14)', bd: 'rgba(59,130,246,0.34)', glow: 'rgba(59,130,246,0.22)',
+          icon: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-2-4H8L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
+          subGroups: [
+            { group: 'انواع وسایل نقلیه', items: ['خودرو سواری و وانت', 'موتورسیکلت', 'قطعات یدکی و لوازم جانبی', 'خودرو کلاسیک / سنگین', 'اجاره خودرو'] }
+          ]
+        },
+        {
+          id: 'mobile',
+          title: 'کالای دیجیتال',
+          sub: 'موبایل، لپ‌تاپ، کنسول',
+          priceLabel: 'قیمت پیشنهادی کالا',
+          color: '#38bdf8', bg: 'rgba(56,189,248,0.14)', bd: 'rgba(56,189,248,0.34)', glow: 'rgba(56,189,248,0.22)',
+          icon: '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+          subGroups: [
+            { group: 'انواع کالای دیجیتال', items: ['موبایل و تبلت', 'رایانه و لپ‌تاپ', 'کنسول بازی و بازی ویدیویی', 'صوتی و تصویری / دوربین', 'لوازم جانبی و مودم'] }
+          ]
+        },
+        {
+          id: 'home',
+          title: 'خانه و آشپزخانه',
+          sub: 'لوازم برقی، مبلمان',
+          priceLabel: 'قیمت پیشنهادی',
+          color: '#f59e0b', bg: 'rgba(245,158,11,0.14)', bd: 'rgba(245,158,11,0.34)', glow: 'rgba(245,158,11,0.22)',
+          icon: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M9 20v-6h6v6"/>',
+          subGroups: [
+            { group: 'لوازم خانه و آشپزخانه', items: ['لوازم خانگی برقی', 'مبلمان و صنایع چوب', 'ظروف و لوازم آشپزخانه', 'فرش، گلیم و موکت', 'نور، روشنایی و دکوراسیون'] }
+          ]
+        },
+        {
+          id: 'services',
+          title: 'خدمات',
+          sub: 'تعمیرات، حمل‌ونقل، فنی',
+          priceLabel: 'دستمزد / مبلغ اعلامی',
+          color: '#8b5cf6', bg: 'rgba(139,92,246,0.14)', bd: 'rgba(139,92,246,0.34)', glow: 'rgba(139,92,246,0.22)',
+          icon: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+          subGroups: [
+            { group: 'انواع خدمات', items: ['پیشه‌وری و تعمیرات منزل', 'موتور و ماشین', 'خدمات رایانه‌ای و موبایل', 'حمل‌ونقل و اسباب‌کشی', 'مالی، حسابداری و بیمه', 'آموزشی و مشاوره', 'آرایشگری و زیبایی', 'نظافت و پذیرایی'] }
+          ]
+        },
+        {
+          id: 'shop',
+          title: 'وسایل شخصی',
+          sub: 'پوشاک، ساعت، آرایشی',
+          priceLabel: 'قیمت پیشنهادی',
+          color: '#ec4899', bg: 'rgba(236,72,153,0.14)', bd: 'rgba(236,72,153,0.34)', glow: 'rgba(236,72,153,0.22)',
+          icon: '<circle cx="12" cy="12" r="6"/><polyline points="12 9 12 12 14 13.5"/><path d="M9.5 3h5l.5 3h-6z"/><path d="M9.5 21h5l.5-3h-6z"/>',
+          subGroups: [
+            { group: 'انواع وسایل شخصی', items: ['کیف، کفش و لباس', 'ساعت، طلا و زیورآلات', 'آرایشی، بهداشتی و عطر', 'سیسمونی و وسایل کودک'] }
+          ]
+        },
+        {
+          id: 'entertainment',
+          title: 'سرگرمی و فراغت',
+          sub: 'تور، دوچرخه، ورزش',
+          priceLabel: 'قیمت پیشنهادی',
+          color: '#22c55e', bg: 'rgba(34,197,94,0.14)', bd: 'rgba(34,197,94,0.34)', glow: 'rgba(34,197,94,0.22)',
+          icon: '<rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="16.5" cy="11" r="1"/><circle cx="18.5" cy="13" r="1"/>',
+          subGroups: [
+            { group: 'سرگرمی و فراغت', items: ['بلیط، تور و چارتر', 'دوچرخه، اسکیت و اسکوتر', 'ورزش و تناسب اندام', 'آلات موسیقی', 'حیوانات خانگی', 'کتاب، کلکسیون و اسباب‌بازی'] }
+          ]
+        },
+        {
+          id: 'social',
+          title: 'اجتماعی',
+          sub: 'رویداد، داوطلبانه، گم‌شده',
+          priceLabel: 'مبلغ / مژدگانی (اختیاری)',
+          color: '#06b6d4', bg: 'rgba(6,182,212,0.14)', bd: 'rgba(6,182,212,0.34)', glow: 'rgba(6,182,212,0.22)',
+          icon: '<circle cx="9" cy="7" r="3"/><path d="M3 20v-1a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1"/><circle cx="17" cy="8" r="2.5"/><path d="M21 20v-1a3.5 3.5 0 0 0-2.5-3.3"/>',
+          subGroups: [
+            { group: 'آگهی‌های اجتماعی', items: ['رویداد و دورهمی', 'فعالیت داوطلبانه و خیریه', 'گم‌شده‌ها و پیداشده‌ها'] }
+          ]
+        },
+        {
+          id: 'industrial',
+          title: 'تجهیزات و صنعتی',
+          sub: 'ابزارآلات، ماشین‌آلات',
+          priceLabel: 'قیمت پیشنهادی',
+          color: '#f97316', bg: 'rgba(249,115,22,0.14)', bd: 'rgba(249,115,22,0.34)', glow: 'rgba(249,115,22,0.22)',
+          icon: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9l-.06-.06a2 2 0 1 1 2.83-2.83L7.4 6.2A1.65 1.65 0 0 0 9 4.6V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.2.6.8 1 1.5 1H21a2 2 0 1 1 0 4h-.09c-.7 0-1.3.4-1.51 1z"/>',
+          subGroups: [
+            { group: 'تجهیزات و صنعتی', items: ['ابزارآلات و یراق', 'ماشین‌آلات صنعتی و کارگاهی', 'تجهیزات کسب‌وکار و فروشگاه', 'مصالح و تجهیزات ساختمان', 'عمده‌فروشی'] }
+          ]
+        },
+        {
+          id: 'jobs',
+          title: 'استخدام و کاریابی',
+          sub: 'حضوری، دورکاری، ادمینی',
+          priceLabel: 'حقوق ماهانه وعده‌داده‌شده',
+          color: '#d946ef', bg: 'rgba(217,70,239,0.14)', bd: 'rgba(217,70,239,0.34)', glow: 'rgba(217,70,239,0.22)',
+          icon: '<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M2 13h20"/>',
+          subGroups: [
+            { group: 'گروه‌های شغلی', items: ['دورکاری، ادمینی و آنلاین', 'اداری و مدیریت', 'فروشگاه، بازاریابی و رستوران', 'رایانه و فناوری اطلاعات', 'صنعتی، فنی و معماری', 'مالی، حسابداری و آموزشی', 'حمل‌ونقل، سرایداری و نظافت', 'درمانی و زیبایی'] }
+          ]
+        }
+      ];
+
+      const CATEGORY_QUICK_FLAGS = {
+        real_estate: [
+          { icon: '💸', text: 'درخواست بیعانه قبل از بازدید ملک', flag: 'درخواست بیعانه قبل از بازدید ملک یا ویلا' },
+          { icon: '📉', text: 'قیمت متری/اجاره خیلی زیر عرف محله', flag: 'قیمت ملک یا اجاره به طرز مشکوکی زیر عرف محله است' },
+          { icon: '📄', text: 'نبود سند تک‌برگ یا کدرهگیری', flag: 'نبود سند رسمی، پروانه ساخت یا مخالفت با کدرهگیری' },
+          { icon: '🔑', text: 'بهانه «کلید دست سرایدار/مالک شهرستان»', flag: 'بهانه حضور نداشتن مالک و درخواست واریز برای رزرو کلید' },
+          { icon: '⚡', text: 'عجله غیرعادی برای عقد قولنامه دستی', flag: 'عجله غیرعادی برای واریز پیش‌پرداخت بدون استعلام ثبتی' },
+          { icon: '🖼️', text: 'عکس‌های ژورنالی یا تکراری', flag: 'عکس‌های ملک شبیه عکس‌های آرشیوی و ژورنالی است' }
+        ],
+        jobs: [
+          { icon: '💸', text: 'درخواست پول ثبت‌نام / پکیج آموزشی', flag: 'درخواست واریز وجه بابت ثبت‌نام، فرم یا پکیج آموزشی (الگوی قطعی کلاهبرداری)' },
+          { icon: '💳', text: 'درخواست کارت بانکی / احراز صرافی', flag: 'درخواست ارسال عکس کارت بانکی، سیم‌کارت یا افتتاح حساب/صرافی به نام کارجو' },
+          { icon: '🤑', text: 'حقوق نجومی برای کار ساده (تایپ/بسته‌بندی)', flag: 'وعده درآمد نجومی برای کارهای ساده خانگی/تایپ/ادمین بدون مهارت' },
+          { icon: '📍', text: 'نبود نام شرکت یا آدرس حضوری', flag: 'امتناع کارفرما از اعلام نام رسمی شرکت و آدرس مصاحبه حضوری' },
+          { icon: '📝', text: 'درخواست سفته سنگین یا مدارک اصلی', flag: 'درخواست سفته سنگین یا تحویل اصل کارت ملی/شناسنامه' },
+          { icon: '✈️', text: 'هدایت فوری به تلگرام/روبیکا', flag: 'هدایت سریع کارجو به پی‌وی تلگرام برای گرفتن اطلاعات شخصی' }
+        ],
+        services: [
+          { icon: '💸', text: 'درخواست بیعانه قبل از انجام کار', flag: 'درخواست بیعانه یا کل دستمزد پیش از حضور و انجام کار' },
+          { icon: '📉', text: 'نرخ بسیار ارزان و غیرواقعی', flag: 'اعلام نرخ بسیار پایین برای جذب و سپس تحمیل هزینه‌های پنهان' },
+          { icon: '🏪', text: 'نداشتن محل کار ثابت یا مجوز', flag: 'فقدان مغازه/کارگاه ثابت، فاکتور رسمی یا جواز کسب' },
+          { icon: '🚫', text: 'امتناع از دادن ضمانت/فاکتور', flag: 'امتناع از ارائه فاکتور کتبی یا ضمانت کیفیت کار' },
+          { icon: '⚡', text: 'عجله برای واریز هزینه قطعه', flag: 'اصرار به واریز فوری پول برای خرید قطعه بدون رویت' }
+        ],
+        social: [
+          { icon: '💸', text: 'درخواست مژدگانی/پول قبل از تحویل', flag: 'درخواست واریز مژدگانی یا هزینه ارسال پیش از تحویل شیء گم‌شده' },
+          { icon: '🔐', text: 'درخواست کد پیامکی (OTP) یا لینک', flag: 'درخواست ارسال کد تایید پیامکی یا کلیک روی لینک ناشناس' },
+          { icon: '🏦', text: 'جمع‌آوری کمک مالی به حساب شخصی', flag: 'درخواست واریز کمک مالی/خیریه به شماره کارت شخصی بدون مجوز' },
+          { icon: '👤', text: 'هویت نامشخص آگهی‌دهنده', flag: 'عدم شفافیت هویت و نبود امکان تایید حضوری' }
+        ],
+        default: [
+          { icon: '💸', text: 'درخواست بیعانه', flag: 'درخواست بیعانه قبل از بازدید' },
+          { icon: '📉', text: 'قیمت خیلی پایین', flag: 'قیمت مشکوک و خیلی زیر عرف بازار' },
+          { icon: '🚫', text: 'ردِ پرداخت امن', flag: 'مخالفت با پرداخت امن یا تست حضوری' },
+          { icon: '🔒', text: 'کامنت بسته', flag: 'بسته بودن کامنت‌ها یا نبود رضایت واقعی' },
+          { icon: '⚡', text: 'عجله برای واریز', flag: 'عجله غیرعادی فروشنده برای واریز فوری' },
+          { icon: '📄', text: 'بدون جعبه/سند', flag: 'فقدان جعبه، فاکتور یا انتقال مالکیت' }
+        ]
       };
 
       const PLATFORM_PLACEHOLDERS = {
@@ -2708,29 +3372,62 @@
       };
 
       const CATEGORY_FIELD_SCHEMAS = {
-        mobile: [
-          { key: 'itemModel', label: 'مدل دقیق، حافظه و رم (برای جستجوی دیوار/شیپور)', type: 'text', span: 2, placeholder: 'مثلاً آیفون 13 پرو 256 گیگ یا گلکسی S24 Ultra' },
-          { key: 'batteryHealth', label: 'سلامت باتری / مدت کارکرد', type: 'text', placeholder: 'مثلاً 89% یا 6 ماه کارکرد' },
-          { key: 'registryStatus', label: 'وضعیت رجیستری و انتقال همتا', type: 'select', options: ['نامشخص', 'رجیستر با انتقال مالکیت فوری', 'بدون انتقال مالکیت / مسافری', 'آکبند / نات‌اکتیو', 'مربوط نیست (لپ‌تاپ/تبلت)'] },
-          { key: 'boxRepair', label: 'جعبه، لوازم و وضعیت بازشدگی', type: 'select', span: 2, options: ['نامشخص', 'جعبه و لوازم کامل، بدون تعمیر', 'بدون جعبه یا بدون فاکتور', 'تعمیری / تعویض قطعه (ال‌سی‌دی یا باتری)'] }
+        real_estate: [
+          { key: 'reNeighborhood', label: 'محله / منطقه دقیق ملک (برای مقایسه دیوار)', type: 'text', placeholder: 'مثلاً پونک / سعادت‌آباد / کردان' },
+          { key: 'reArea', label: 'متراژ بنا یا زمین (متر مربع)', type: 'numeric', placeholder: 'مثلاً 95' },
+          { key: 'reBuildYear', label: 'سال ساخت', type: 'text', placeholder: 'مثلاً 1399 یا نوساز' },
+          { key: 'reDeposit', label: 'مبلغ رهن / ودیعه یا پیش‌پرداخت (تومان)', type: 'numeric', placeholder: 'مثلاً 500,000,000' },
+          { key: 'reDocType', label: 'وضعیت سند و کدرهگیری', type: 'select', options: ['نامشخص', 'سند تک‌برگ رسمی (قابل استعلام)', 'قولنامه‌ای / وکالتی', 'پیش‌فروش با پروانه ساخت', 'ثبت در سامانه کاتب / کدرهگیری دارد'] },
+          { key: 'reVisitStatus', label: 'وضعیت بازدید و درخواست بیعانه', type: 'select', options: ['هنوز هماهنگ نشده', 'بازدید حضوری آزاد بدون بیعانه', 'درخواست بیعانه قبل از بازدید / کلید', 'املاک معتبر با آدرس دفتر'] }
         ],
         car: [
-          { key: 'itemModel', label: 'نام خودرو، تیپ و سال ساخت (برای جستجوی باما/دیوار)', type: 'text', span: 2, placeholder: 'مثلاً رانا پلاس مدل 1400 یا پژو 207 پانوراما 1402' },
-          { key: 'carMileage', label: 'کارکرد خودرو (کیلومتر)', type: 'numeric', placeholder: 'مثلاً 65,000' },
+          { key: 'itemModel', label: 'نام وسیله نقلیه، تیپ و سال ساخت (برای جستجوی باما/دیوار)', type: 'text', span: 2, placeholder: 'مثلاً رانا پلاس مدل 1400 یا پژو 207 پانوراما 1402' },
+          { key: 'carMileage', label: 'کارکرد (کیلومتر)', type: 'numeric', placeholder: 'مثلاً 65,000' },
           { key: 'carInsurance', label: 'مهلت بیمه شخص ثالث', type: 'text', placeholder: 'مثلاً 8 ماه' },
           { key: 'carPaint', label: 'وضعیت رنگ و شاسی', type: 'select', span: 2, options: ['نامشخص', 'بی‌رنگ و شاسی پلمپ', 'یک یا دو لکه رنگ جزئی', 'دوررنگ یا تعویض قطعه بدنه', 'شاسی ضربه‌خورده / جوش‌خورده'] }
         ],
+        mobile: [
+          { key: 'itemModel', label: 'مدل دقیق، حافظه و رم (برای جستجوی دیوار/شیپور)', type: 'text', span: 2, placeholder: 'مثلاً آیفون 13 پرو 256 گیگ یا لپ‌تاپ ایسوس TUF' },
+          { key: 'batteryHealth', label: 'سلامت باتری / مدت کارکرد', type: 'text', placeholder: 'مثلاً 89% یا 6 ماه کارکرد' },
+          { key: 'registryStatus', label: 'وضعیت رجیستری و انتقال همتا', type: 'select', options: ['نامشخص', 'رجیستر با انتقال مالکیت فوری', 'بدون انتقال مالکیت / مسافری', 'آکبند / نات‌اکتیو', 'مربوط نیست (لپ‌تاپ/کنسول)'] },
+          { key: 'boxRepair', label: 'جعبه، لوازم و وضعیت بازشدگی', type: 'select', span: 2, options: ['نامشخص', 'جعبه و لوازم کامل، بدون تعمیر', 'بدون جعبه یا بدون فاکتور', 'تعمیری / تعویض قطعه (ال‌سی‌دی یا باتری)'] }
+        ],
         home: [
-          { key: 'itemModel', label: 'برند و مدل دقیق دستگاه (برای مقایسه دیوار/شیپور)', type: 'text', span: 2, placeholder: 'مثلاً ماشین لباسشویی ال‌جی 9 کیلویی یا یخچال اسنوا' },
+          { key: 'itemModel', label: 'برند و مدل دقیق دستگاه/وسایل (برای مقایسه دیوار/شیپور)', type: 'text', span: 2, placeholder: 'مثلاً ماشین لباسشویی ال‌جی 9 کیلویی یا مبل راحتی 7 نفره' },
           { key: 'usageDuration', label: 'مدت کارکرد تقریبی', type: 'text', placeholder: 'مثلاً 2 سال' },
           { key: 'homeCondition', label: 'وضعیت سلامت، کارتن و تعمیر', type: 'select', options: ['نامشخص', 'سالم و بدون تعمیر با کارتن', 'سالم ولی بدون کارتن/گارانتی', 'نیازمند سرویس یا تعمیری'] }
         ],
+        services: [
+          { key: 'itemModel', label: 'عنوان دقیق خدمت مورد نظر', type: 'text', span: 2, placeholder: 'مثلاً تعمیر پکیج ایران رادیاتور / باربری / طراحی سایت' },
+          { key: 'srvPrepay', label: 'درخواست پیش‌پرداخت / بیعانه', type: 'select', options: ['هنوز نپرسیده‌ام', 'تسویه کامل پس از انجام و تایید کار', 'درخواست بیعانه قبل از اعزام یا شروع کار'] },
+          { key: 'srvLicense', label: 'محل کار ثابت و مجوز صنفی', type: 'select', options: ['نامشخص', 'دارای مغازه/دفتر ثابت و فاکتور رسمی', 'سیار / شخصی بدون آدرس مشخص'] }
+        ],
         shop: [
-          { key: 'itemModel', label: 'نوع کالا و برند (برای بررسی قیمت بازار)', type: 'text', span: 2, placeholder: 'مثلاً کتونی نایک ایرفورس / ساعت کاسیو / ادکلن' },
+          { key: 'itemModel', label: 'نوع کالا، برند و سایز (برای بررسی قیمت بازار)', type: 'text', span: 2, placeholder: 'مثلاً کتونی نایک ایرفورس / ساعت کاسیو / ادکلن اورجینال' },
           { key: 'shopReturn', label: 'امکان مرجوعی، تعویض یا پرداخت در محل', type: 'select', span: 2, options: ['نامشخص', 'پرداخت در محل یا ضمانت تعویض دارد', 'ندارد — فقط واریز کامل قبل از ارسال'] }
         ],
+        entertainment: [
+          { key: 'itemModel', label: 'نام دقیق کالا، تور یا بلیط (برای مقایسه قیمت)', type: 'text', span: 2, placeholder: 'مثلاً دوچرخه ویوا 26 / بلیط کنسرت / تور کیش / گیتار یاماها' },
+          { key: 'entEventInfo', label: 'تاریخ رویداد/تور یا وضعیت سلامت', type: 'text', placeholder: 'مثلاً 15 آذر / سالم و کم‌کارکرد' },
+          { key: 'entTransfer', label: 'نحوه تحویل و تضمین اصالت', type: 'select', options: ['نامشخص', 'تحویل حضوری / صدور از آژانس یا سامانه رسمی', 'ارسال فایل PDF بلیط پس از کارت‌به‌کارت'] }
+        ],
+        social: [
+          { key: 'itemModel', label: 'موضوع دقیق آگهی اجتماعی', type: 'text', span: 2, placeholder: 'مثلاً پیدا شدن مدارک / رویداد کوهنوردی / کمک داوطلبانه' },
+          { key: 'socMoneyReq', label: 'آیا درخواست پول یا کد پیامکی شده؟', type: 'select', options: ['خیر، هیچ درخواستی نشده', 'بله — درخواست مژدگانی/کمک مالی قبل از تحویل', 'بله — درخواست کد پیامکی یا لینک ناشناس'] },
+          { key: 'socIdentity', label: 'شفافیت هویت آگهی‌دهنده', type: 'select', options: ['نامشخص', 'موسسه/نهاد رسمی و قابل استعلام', 'فرد ناشناس بدون آدرس مشخص'] }
+        ],
+        industrial: [
+          { key: 'itemModel', label: 'نام دستگاه/تجهیزات و برند (برای استعلام قیمت)', type: 'text', span: 2, placeholder: 'مثلاً دستگاه اسپرسوساز صنعتی / دریل بوش / یخچال ویترینی' },
+          { key: 'indSpec', label: 'مشخصات فنی (توان، ظرفیت، سال ساخت)', type: 'text', placeholder: 'مثلاً سه فاز / 2022 / کارکرد کم' },
+          { key: 'indTest', label: 'امکان تست زیر بار و فاکتور', type: 'select', options: ['نامشخص', 'بازدید کارگاهی و تست زیر بار دارد', 'ارسال بدون تست حضوری / پیش‌پرداخت سنگین'] }
+        ],
+        jobs: [
+          { key: 'jobCompany', label: 'نام شرکت / کارفرما و آدرس (برای استعلام اعتبار)', type: 'text', span: 2, placeholder: 'مثلاً شرکت فناوری ... / پیج اینستاگرام ...' },
+          { key: 'jobWorkType', label: 'نوع همکاری', type: 'select', options: ['نامشخص', 'حضوری با قرارداد و بیمه', 'دورکاری / ادمینی / کار در منزل', 'پروژه‌ای / پورسانتی'] },
+          { key: 'jobFeeReq', label: 'درخواست وجه، سفته یا مدارک بانکی؟', type: 'select', options: ['خیر، هیچ پولی نخواسته‌اند', 'بله — درخواست هزینه ثبت‌نام / آموزش / پکیج', 'بله — درخواست افتتاح حساب / کارت بانکی / احراز صرافی'] }
+        ],
         other: [
-          { key: 'itemModel', label: 'نام و مدل دقیق کالا (برای استعلام قیمت دیوار/شیپور)', type: 'text', span: 2, placeholder: 'مثلاً دوچرخه ویوا سایز 26 یا پلی‌استیشن 5 اسلیم' },
+          { key: 'itemModel', label: 'نام و مدل دقیق مورد (برای استعلام قیمت دیوار/شیپور)', type: 'text', span: 2, placeholder: 'مثلاً نام دقیق کالا یا مورد معامله' },
           { key: 'otherCondition', label: 'وضعیت ظاهری و فنی', type: 'select', span: 2, options: ['نامشخص', 'در حد نو / کم‌کارکرد', 'کارکرده سالم', 'دارای خط‌وخش یا نقص جزئی'] }
         ]
       };
@@ -2765,6 +3462,9 @@
         updateProviderUI(state.settings.provider);
         updateModeUI();
         updatePlatformGuide('divar');
+        renderCategoryTiles();
+        renderSubcategoryTray();
+        renderQuickFlags();
         renderDynamicFields();
         populateCalcConditions('mobile');
         bindEvents();
@@ -2842,12 +3542,27 @@
         document.querySelectorAll('#platformGrid .platform-btn').forEach(btn => {
           btn.addEventListener('click', () => selectPlatform(btn.dataset.platform));
         });
-        document.querySelectorAll('#categoryGroup .chip').forEach(chip => {
-          chip.addEventListener('click', () => selectCategory(chip));
+        // Bento Hero Quick-Launch Tiles
+        document.getElementById('bentoAutofillTile').addEventListener('click', () => {
+          document.getElementById('autofillImgInput').click();
         });
-        document.querySelectorAll('#quickFlagsGroup .flag-chip').forEach(chip => {
-          chip.addEventListener('click', () => toggleFlag(chip));
+        document.getElementById('bentoReceiptTile').addEventListener('click', () => {
+          switchTab('tools');
+          selectToolPanel('receipt');
         });
+        document.getElementById('bentoToolsTile').addEventListener('click', () => {
+          switchTab('tools');
+          selectToolPanel('phishing');
+        });
+        document.getElementById('bentoHistoryTile').addEventListener('click', () => {
+          switchTab('history');
+        });
+
+        // Tools Hub Bento Launcher
+        document.querySelectorAll('#toolsLauncherGrid .tool-launch-tile').forEach(tile => {
+          tile.addEventListener('click', () => selectToolPanel(tile.dataset.tool));
+        });
+        document.getElementById('toggleAllToolsBtn').addEventListener('click', toggleAllToolsView);
 
         document.getElementById('sellerId').addEventListener('input', () => {
           checkLocalAndCloudBlacklist();
@@ -3230,6 +3945,28 @@
         box.appendChild(document.createTextNode(g.body));
       }
 
+      function selectToolPanel(toolKey) {
+        const grid = document.getElementById('toolsGridWrap');
+        const toggleBtn = document.getElementById('toggleAllToolsBtn');
+        if (grid) grid.classList.remove('show-all');
+        if (toggleBtn) toggleBtn.textContent = 'نمایش همه ابزارها';
+
+        document.querySelectorAll('#toolsLauncherGrid .tool-launch-tile').forEach(t => {
+          t.classList.toggle('active', t.dataset.tool === toolKey);
+        });
+        document.querySelectorAll('#toolsGridWrap .tool-panel').forEach(p => {
+          p.classList.toggle('active', p.dataset.toolPanel === toolKey);
+        });
+      }
+
+      function toggleAllToolsView() {
+        const grid = document.getElementById('toolsGridWrap');
+        const btn = document.getElementById('toggleAllToolsBtn');
+        if (!grid || !btn) return;
+        const isAll = grid.classList.toggle('show-all');
+        btn.textContent = isAll ? 'نمای تک‌ابزار (اپ)' : 'نمایش همه ابزارها';
+      }
+
       function selectPlatform(p) {
         state.platform = p;
         document.querySelectorAll('#platformGrid .platform-btn').forEach(b => {
@@ -3238,27 +3975,193 @@
         updatePlatformGuide(p);
         const rawEl = document.getElementById('rawText');
         if (rawEl && PLATFORM_PLACEHOLDERS[p]) rawEl.placeholder = PLATFORM_PLACEHOLDERS[p];
-        if (p === 'bama') {
-          const carChip = document.querySelector('#categoryGroup .chip[data-cat="car"]');
-          if (carChip) {
-            selectCategory(carChip);
-            return;
-          }
+        if (p === 'bama' && state.category !== 'car') {
+          selectCategoryById('car');
+          return;
         }
         renderDynamicFields();
       }
 
-      function selectCategory(el) {
-        document.querySelectorAll('#categoryGroup .chip').forEach(c => c.classList.remove('active'));
-        el.classList.add('active');
-        state.category = el.dataset.cat;
+      function selectCategoryById(catId, preferredSub = '') {
+        const meta = CATEGORY_CATALOG.find(c => c.id === catId) || CATEGORY_CATALOG[2];
+        state.category = meta.id;
+        state.selectedFlags = [];
+
+        // Set default or preferred subcategory
+        const allSubs = [];
+        meta.subGroups.forEach(sg => {
+          sg.items.forEach(it => {
+            const fullVal = meta.subGroups.length > 1 ? `${sg.group} • ${it}` : it;
+            allSubs.push(fullVal);
+          });
+        });
+        if (preferredSub && allSubs.includes(preferredSub)) {
+          state.subcategory = preferredSub;
+        } else if (preferredSub) {
+          const fuzzy = allSubs.find(s => s.includes(preferredSub) || preferredSub.includes(s));
+          state.subcategory = fuzzy || allSubs[0] || '';
+        } else {
+          state.subcategory = allSubs[0] || '';
+        }
+
+        const priceLbl = document.getElementById('priceFieldLabel');
+        if (priceLbl) priceLbl.textContent = meta.priceLabel || 'قیمت پیشنهادی';
+
+        renderCategoryTiles();
+        renderSubcategoryTray();
+        renderQuickFlags();
         renderDynamicFields();
+      }
+
+      function renderCategoryTiles() {
+        const wrap = document.getElementById('categoryGroup');
+        if (!wrap) return;
+        wrap.textContent = '';
+
+        const activeMeta = CATEGORY_CATALOG.find(c => c.id === state.category);
+        const sumEl = document.getElementById('selectedCatSummary');
+        if (sumEl) {
+          sumEl.textContent = activeMeta
+            ? `${activeMeta.title}${state.subcategory ? ' • ' + state.subcategory : ''}`
+            : (CATEGORY_NAMES[state.category] || 'سایر');
+        }
+
+        CATEGORY_CATALOG.forEach(cat => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `cat-tile${state.category === cat.id ? ' active' : ''}`;
+          btn.dataset.cat = cat.id;
+          btn.style.setProperty('--cat-color', cat.color);
+          btn.style.setProperty('--cat-bg', cat.bg);
+          btn.style.setProperty('--cat-bd', cat.bd);
+          btn.style.setProperty('--cat-glow', cat.glow);
+
+          const ico = document.createElement('div');
+          ico.className = 'cat-tile-ico';
+          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svg.setAttribute('width', '18');
+          svg.setAttribute('height', '18');
+          svg.setAttribute('viewBox', '0 0 24 24');
+          svg.setAttribute('fill', 'none');
+          svg.setAttribute('stroke', 'currentColor');
+          svg.setAttribute('stroke-width', '2');
+          svg.setAttribute('stroke-linecap', 'round');
+          svg.setAttribute('stroke-linejoin', 'round');
+          svg.innerHTML = cat.icon;
+          ico.appendChild(svg);
+
+          const txt = document.createElement('div');
+          txt.className = 'cat-tile-text';
+          const tTitle = document.createElement('span');
+          tTitle.className = 'cat-tile-title';
+          tTitle.textContent = cat.title;
+          const tSub = document.createElement('span');
+          tSub.className = 'cat-tile-sub';
+          tSub.textContent = cat.sub;
+          txt.appendChild(tTitle);
+          txt.appendChild(tSub);
+
+          btn.appendChild(ico);
+          btn.appendChild(txt);
+          btn.addEventListener('click', () => selectCategoryById(cat.id));
+          wrap.appendChild(btn);
+        });
+      }
+
+      function renderSubcategoryTray() {
+        const tray = document.getElementById('subcatTray');
+        const titleEl = document.getElementById('subcatTrayTitle');
+        const tagEl = document.getElementById('subcatSelectedTag');
+        const bodyEl = document.getElementById('subcatTrayBody');
+        if (!tray || !bodyEl) return;
+
+        const meta = CATEGORY_CATALOG.find(c => c.id === state.category);
+        if (!meta || !meta.subGroups || !meta.subGroups.length) {
+          tray.style.display = 'none';
+          return;
+        }
+
+        tray.style.display = 'block';
+        titleEl.textContent = `زیردسته‌های «${meta.title}»`;
+        tagEl.textContent = state.subcategory || 'عمومی';
+        bodyEl.textContent = '';
+
+        const isMultiGroup = meta.subGroups.length > 1;
+        if (isMultiGroup) {
+          const grid = document.createElement('div');
+          grid.className = 'subcat-groups-wrap';
+
+          meta.subGroups.forEach(sg => {
+            const gBox = document.createElement('div');
+            gBox.className = 'subcat-group-box';
+
+            const gTitle = document.createElement('div');
+            gTitle.className = 'subcat-group-title';
+            gTitle.textContent = sg.group;
+            gBox.appendChild(gTitle);
+
+            const pills = document.createElement('div');
+            pills.className = 'subcat-pills';
+            sg.items.forEach(itemText => {
+              const fullVal = `${sg.group} • ${itemText}`;
+              const pBtn = document.createElement('button');
+              pBtn.type = 'button';
+              pBtn.className = `subcat-pill${state.subcategory === fullVal ? ' active' : ''}`;
+              pBtn.textContent = itemText;
+              pBtn.addEventListener('click', () => {
+                state.subcategory = fullVal;
+                renderSubcategoryTray();
+                renderCategoryTiles();
+                renderDynamicFields();
+              });
+              pills.appendChild(pBtn);
+            });
+
+            gBox.appendChild(pills);
+            grid.appendChild(gBox);
+          });
+          bodyEl.appendChild(grid);
+        } else {
+          const pills = document.createElement('div');
+          pills.className = 'subcat-pills';
+          meta.subGroups[0].items.forEach(itemText => {
+            const pBtn = document.createElement('button');
+            pBtn.type = 'button';
+            pBtn.className = `subcat-pill${state.subcategory === itemText ? ' active' : ''}`;
+            pBtn.textContent = itemText;
+            pBtn.addEventListener('click', () => {
+              state.subcategory = itemText;
+              renderSubcategoryTray();
+              renderCategoryTiles();
+              renderDynamicFields();
+            });
+            pills.appendChild(pBtn);
+          });
+          bodyEl.appendChild(pills);
+        }
+      }
+
+      function renderQuickFlags() {
+        const wrap = document.getElementById('quickFlagsGroup');
+        if (!wrap) return;
+        wrap.textContent = '';
+        const list = CATEGORY_QUICK_FLAGS[state.category] || CATEGORY_QUICK_FLAGS.default;
+        list.forEach(item => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `chip flag-chip${state.selectedFlags.includes(item.flag) ? ' active' : ''}`;
+          btn.dataset.flag = item.flag;
+          btn.textContent = `${item.icon} ${item.text}`;
+          btn.addEventListener('click', () => toggleFlag(btn));
+          wrap.appendChild(btn);
+        });
       }
 
       function renderDynamicFields() {
         const tag = document.getElementById('dynamicContextTag');
         if (tag) {
-          tag.textContent = `${PLATFORM_NAMES[state.platform] || state.platform} • ${CATEGORY_NAMES[state.category] || state.category}`;
+          const subPart = state.subcategory ? ` (${state.subcategory})` : '';
+          tag.textContent = `${PLATFORM_NAMES[state.platform] || state.platform} • ${CATEGORY_NAMES[state.category] || state.category}${subPart}`;
         }
 
         const catWrap = document.getElementById('categoryDynamicWrap');
@@ -3787,7 +4690,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         const price = toEnDigits(document.getElementById('priceInput').value).trim();
 
         const activeDetails = collectActiveDetails();
-        if (!rawText && !activeDetails.itemModel && state.images.length === 0 && state.selectedFlags.length === 0) {
+        if (!rawText && !activeDetails.itemModel && !activeDetails.reNeighborhood && !activeDetails.jobCompany && state.images.length === 0 && state.selectedFlags.length === 0) {
           showToast('حداقل مدل کالا، متن آگهی، یک نشانه یا یک عکس وارد کنید');
           return;
         }
@@ -3832,6 +4735,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
           action: 'analyze',
           platform: state.platform,
           category: state.category,
+          subcategory: state.subcategory,
           sellerId,
           price,
           details: activeDetails,
@@ -3886,6 +4790,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
             date: new Date().toLocaleDateString('fa-IR'),
             platform: state.platform,
             category: state.category,
+            subcategory: state.subcategory || '',
             sellerId: sellerId || 'ثبت‌نشده',
             price: price || 'نامشخص',
             excerpt: (activeDetails.itemModel ? `${activeDetails.itemModel}${rawText ? ' — ' + rawText : ''}` : rawText).slice(0, 95) || 'تحلیل مبتنی بر تصویر/نشانه‌ها',
@@ -4164,6 +5069,22 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         if (d.safePay && d.safePay.includes('موافق')) {
           risk -= 12;
           greenFlags.push('پذیرش پرداخت امن ریسک از دست رفتن وجه را به‌شدت کاهش می‌دهد.');
+        }
+        if (d.reVisitStatus && d.reVisitStatus.includes('بیعانه')) {
+          risk += 28;
+          redFlags.push('درخواست بیعانه قبل از بازدید حضوری ملک یا ویلا یکی از شایع‌ترین کلاهبرداری‌های املاک است.');
+        }
+        if (d.jobFeeReq && d.jobFeeReq.includes('بله')) {
+          risk += 38;
+          redFlags.push('🚨 درخواست پول ثبت‌نام، پکیج یا کارت بانکی/احراز هویت صرافی در آگهی استخدام نشانه قطعی کلاهبرداری یا سوءاستفاده پولشویی است!');
+        }
+        if (d.srvPrepay && d.srvPrepay.includes('بیعانه')) {
+          risk += 20;
+          redFlags.push('درخواست بیعانه پیش از حضور و انجام خدمات فنی بدون قرارداد معتبر پرریسک است.');
+        }
+        if (d.socMoneyReq && d.socMoneyReq.includes('بله')) {
+          risk += 35;
+          redFlags.push('درخواست مژدگانی قبلی، وجه یا کد پیامکی در آگهی اجتماعی به‌شدت مشکوک به کلاهبرداری است.');
         }
 
         const traps = [
@@ -4740,8 +5661,12 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         if (navigator.share) {
           try { await navigator.share({ title: 'گزارش سپر خرید Pro', text }); } catch (_) {}
         } else {
-          await navigator.clipboard.writeText(text);
-          showToast('خلاصه گزارش برای اشتراک‌گذاری کپی شد');
+          try {
+            await navigator.clipboard.writeText(text);
+            showToast('خلاصه گزارش برای اشتراک‌گذاری کپی شد');
+          } catch (_) {
+            showToast('امکان کپی خودکار نبود؛ می‌توانید از خروجی کارت PNG استفاده کنید');
+          }
         }
       }
 
@@ -4760,6 +5685,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         document.querySelectorAll('.flag-chip').forEach(c => c.classList.remove('active'));
         const revBox = document.getElementById('reverseImgResultBox');
         if (revBox) revBox.style.display = 'none';
+        renderQuickFlags();
         renderDynamicFields();
         renderPreviews();
         document.getElementById('resultSection').classList.remove('visible');
@@ -4906,6 +5832,13 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         sideBadge.textContent = count;
         sideBadge.style.display = count ? 'inline-block' : 'none';
         document.getElementById('historyStats').textContent = `${count} پرونده`;
+        const bStats = document.getElementById('bentoStatsBadge');
+        const bScam = document.getElementById('bentoScamCount');
+        if (bStats) bStats.textContent = `${count} پرونده`;
+        if (bScam) {
+          const scams = state.history.filter(x => x.outcome === 'scam').length;
+          bScam.textContent = `${scams} کلاهبردار در لیست سیاه`;
+        }
 
         const q = normalizeSearch(document.getElementById('historySearch')?.value || '');
         const filtered = state.history.filter(h => {
@@ -5092,10 +6025,12 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
           cases: state.history
         };
         const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
+        a.href = url;
         a.download = `separ-kharid-backup-${Date.now()}.json`;
         a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 3000);
         showToast('فایل بکاپ JSON دانلود شد');
       }
 
@@ -5118,7 +6053,10 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
               createdAt: Number(item.createdAt) || Date.now(),
               date: String(item.date || new Date().toLocaleDateString('fa-IR')).slice(0, 32),
               platform: PLATFORM_NAMES[item.platform] ? item.platform : 'divar',
-              category: String(item.category || 'other').slice(0, 24),
+              category: CATEGORY_NAMES[item.category] ? item.category : 'other',
+              subcategory: String(item.subcategory || '').slice(0, 80),
+              usedModel: String(item.usedModel || '').slice(0, 80),
+              details: (item.details && typeof item.details === 'object') ? item.details : {},
               sellerId: String(item.sellerId || 'ثبت‌نشده').slice(0, 80),
               price: String(item.price || 'نامشخص').slice(0, 40),
               excerpt: String(item.excerpt || '').slice(0, 200),
@@ -5539,7 +6477,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
                 ? 'دیتابیس لیست سیاه: PostgreSQL دائمی (متصل ✅)'
                 : 'دیتابیس لیست سیاه: فایل محلی موقت (برای دائمی‌شدن، DATABASE_URL را در Render اضافه کنید)';
               renderAlertBox(diagBox, 'safe', '✅ اتصال سرور و هوش مصنوعی ۱۰۰٪ سالم است!', `مدل فعال پاسخ‌گو: ${gData.usedModel || hData.model || 'auto'}`, [
-                `نسخه سرور: ${hData.version || 'v7'}`,
+                `نسخه سرور: ${hData.version || 'v8'}`,
                 gData.searchNote || 'استعلام زنده آماده است.',
                 blModeText
               ]);
@@ -5693,7 +6631,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
                 signal: controller.signal
               });
               const txt = await res.text();
-              if (!res.ok) throw new Error(extractJsonSafe(txt)?.error || `HTTP_${res.status}`);
+              if (!res.ok) throw new Error(safeParseServerError(txt, res.status));
               data = extractJsonSafe(txt);
             } else if (isGemini) {
               const prompt = `از این اسکرین‌شات آگهی بازار ایران (دیوار، شیپور، اینستاگرام، باما، تلگرام) اطلاعات را استخراج کن و فقط JSON برگردان:
@@ -5712,8 +6650,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
             selectPlatform(data.platform);
           }
           if (data.category && CATEGORY_NAMES[data.category]) {
-            const catChip = document.querySelector(`#categoryGroup .chip[data-cat="${data.category}"]`);
-            if (catChip) selectCategory(catChip);
+            selectCategoryById(data.category, data.subcategory || '');
           }
           if (data.sellerId) {
             document.getElementById('sellerId').value = data.sellerId;
@@ -5875,7 +6812,7 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
               signal: controller.signal
             });
             const txt = await res.text();
-            if (!res.ok) throw new Error(extractJsonSafe(txt)?.error || `HTTP_${res.status}`);
+            if (!res.ok) throw new Error(safeParseServerError(txt, res.status));
             data = extractJsonSafe(txt);
           } else if (isGemini) {
             const prompt = `تو متخصص تشخیص فیش واریز بانکی جعلی در ایران هستی. مبلغ مورد انتظار: ${expectedAmount || 'نامشخص'} تومان | بانک مقصد: ${expectedBank || 'نامشخص'}.
