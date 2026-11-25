@@ -1,0 +1,17 @@
+{
+  "name": "separ-kharid-pro-server",
+  "version": "2.0.0",
+  "description": "Backend Node.js server for Separ Kharid Pro PWA (Serper, Reverse Image Lens, Auto-Fill, Fake Receipt Detector, PostgreSQL)",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  }
+}
