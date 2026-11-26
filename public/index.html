@@ -1995,6 +1995,41 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--stroke-card); border-radius: 99px; }
 
+    /* Reverse Image Collapsible Similar Tray & Crisp Mobile Header */
+    .site-safe { background: var(--success-bg); color: var(--success-fg); border: 1px solid var(--success-border); }
+
+    .similar-collapse {
+      margin-top: 8px;
+      border-radius: 11px;
+      border: 1px dashed var(--stroke-card);
+      background: var(--control-bg);
+      padding: 8px 10px;
+    }
+
+    .similar-collapse summary {
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .similar-collapse summary::-webkit-details-marker { display: none; }
+    .similar-collapse[open] summary { margin-bottom: 8px; color: var(--accent-cyan); }
+
+    @media (max-width: 600px) {
+      .app-header { padding: 8px 12px; }
+      .brand-text h1 { font-size: 0.88rem; }
+      .brand-text span { display: none; }
+      .header-actions { gap: 6px; flex-shrink: 0; }
+      .mode-pill { white-space: nowrap; font-size: 0.67rem; padding: 5px 9px; }
+      .install-btn { white-space: nowrap; font-size: 0.68rem; padding: 5px 8px; }
+    }
+
     /* Print / PDF */
     @media print {
       body { background: #fff !important; color: #000 !important; padding: 0 !important; }
@@ -4157,6 +4192,138 @@
         });
       }
 
+      function getPlatformFieldsForContext(platform, category) {
+        if (platform === 'divar' || platform === 'sheypoor') {
+          const platFa = platform === 'divar' ? 'دیوار' : 'شیپور';
+          const cityField = { key: 'city', label: 'شهر آگهی (برای مقایسه قیمت محلی)', type: 'city', placeholder: 'مثلاً تهران' };
+
+          if (category === 'real_estate') {
+            return [
+              cityField,
+              {
+                key: 'sellerBadge',
+                label: 'سمت و احراز هویت آگهی‌دهنده',
+                type: 'select',
+                options: [
+                  'نامشخص',
+                  'مالک شخصی (احراز هویت شده)',
+                  'مشاور املاک دارای پروانه و دفتر',
+                  'سازنده / شرکت ساختمانی',
+                  'واسطه / حساب تازه‌ساخت بدون احراز'
+                ]
+              },
+              {
+                key: 'dealType',
+                label: 'روش عقد قرارداد و پرداخت',
+                type: 'select',
+                span: 2,
+                options: [
+                  'نامشخص',
+                  'قرارداد رسمی در دفترخانه / سامانه کاتب',
+                  'مبایعه‌نامه یا اجاره‌نامه با کدرهگیری',
+                  'قولنامه دستی بدون استعلام ثبتی',
+                  'درخواست بیعانه / رزرو قبل از بازدید ملک'
+                ]
+              }
+            ];
+          }
+
+          if (category === 'car') {
+            return [
+              cityField,
+              {
+                key: 'carSellerRole',
+                label: 'سمت آگهی‌دهنده خودرو',
+                type: 'select',
+                options: ['نامشخص', 'مالک شخصی (برگ سبز به نام خودش)', 'نمایشگاه / اتوگالری', 'دلال / واسطه (وکالتی)']
+              },
+              {
+                key: 'carInspection',
+                label: 'پذیرش کارشناسی رنگ/فنی انتخابی شما',
+                type: 'select',
+                span: 2,
+                options: ['هنوز نپرسیده‌ام', 'بله، موافق کارشناسی به انتخاب خریدار', 'خیر / اصرار بر برگه کارشناسی خودش']
+              }
+            ];
+          }
+
+          if (category === 'jobs') {
+            return [
+              cityField,
+              {
+                key: 'sellerBadge',
+                label: `وضعیت کارفرما در ${platFa}`,
+                type: 'select',
+                options: ['نامشخص', 'پنل شرکتی / کارفرمای تاییدشده', 'کارفرمای عادی با سابقه', 'حساب تازه‌ساخت بدون نام شرکت']
+              },
+              {
+                key: 'dealType',
+                label: 'روش مصاحبه و شروع همکاری',
+                type: 'select',
+                span: 2,
+                options: ['نامشخص', 'مصاحبه حضوری در دفتر شرکت', 'مصاحبه آنلاین با شرکت مشخص', 'فقط چت تلگرام / بدون مصاحبه حضوری']
+              }
+            ];
+          }
+
+          if (category === 'services') {
+            return [
+              cityField,
+              {
+                key: 'sellerBadge',
+                label: `سابقه متخصص در ${platFa}`,
+                type: 'select',
+                options: ['نامشخص', 'کسب‌وکار تاییدشده / دارای مجوز', 'متخصص با سابقه', 'حساب تازه‌ساخت بدون احراز']
+              },
+              {
+                key: 'dealType',
+                label: 'نحوه انجام خدمت و تسویه',
+                type: 'select',
+                span: 2,
+                options: ['نامشخص', 'انجام در محل و تسویه پس از تایید', 'مراجعه حضوری به مغازه / کارگاه', 'درخواست بیعانه قبل از اعزام']
+              }
+            ];
+          }
+
+          if (category === 'social') {
+            return [
+              cityField,
+              {
+                key: 'sellerBadge',
+                label: `هویت آگهی‌دهنده در ${platFa}`,
+                type: 'select',
+                options: ['نامشخص', 'نهاد / برگزارکننده رسمی', 'کاربر تاییدشده', 'حساب ناشناس / تازه‌ساخت']
+              },
+              {
+                key: 'dealType',
+                label: 'نحوه هماهنگی و تحویل',
+                type: 'select',
+                span: 2,
+                options: ['نامشخص', 'ملاقات حضوری در مکان عمومی', 'ثبت‌نام از طریق سایت رسمی', 'درخواست واریز وجه یا کد پیامکی']
+              }
+            ];
+          }
+        }
+
+        if (platform === 'telegram') {
+          const baseTg = (PLATFORM_FIELD_SCHEMAS.telegram || []).slice(0, 2);
+          if (category === 'real_estate') {
+            return [
+              ...baseTg,
+              { key: 'tgEscrow', label: 'روش بازدید و عقد قرارداد', type: 'select', span: 2, options: ['نامشخص', 'بازدید حضوری و قرارداد رسمی', 'درخواست بیعانه/کارت‌به‌کارت قبل از بازدید'] }
+            ];
+          }
+          if (category === 'jobs') {
+            return [
+              ...baseTg,
+              { key: 'tgEscrow', label: 'روش جذب و مصاحبه', type: 'select', span: 2, options: ['نامشخص', 'مصاحبه حضوری در دفتر شرکت', 'فقط چت بدون آدرس شرکت', 'درخواست واریز وجه یا اطلاعات بانکی'] }
+            ];
+          }
+        }
+
+        return PLATFORM_FIELD_SCHEMAS[platform] || PLATFORM_FIELD_SCHEMAS.divar;
+      }
+
       function renderDynamicFields() {
         const tag = document.getElementById('dynamicContextTag');
         if (tag) {
@@ -4176,7 +4343,7 @@
         renderDynamicGroup(
           platWrap,
           `🧭 جزئیات بستر ${PLATFORM_NAMES[state.platform] || state.platform}`,
-          PLATFORM_FIELD_SCHEMAS[state.platform] || PLATFORM_FIELD_SCHEMAS.divar
+          getPlatformFieldsForContext(state.platform, state.category)
         );
       }
 
@@ -4247,7 +4414,7 @@
       function collectActiveDetails() {
         const activeKeys = new Set([
           ...(CATEGORY_FIELD_SCHEMAS[state.category] || []).map(f => f.key),
-          ...(PLATFORM_FIELD_SCHEMAS[state.platform] || []).map(f => f.key)
+          ...getPlatformFieldsForContext(state.platform, state.category).map(f => f.key)
         ]);
         const out = {};
         activeKeys.forEach(k => {
@@ -4982,15 +5149,21 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
           ? rev.matches.slice(0, 6).map(m => ({
               title: String(m?.title || '').slice(0, 85),
               source: String(m?.source || '').slice(0, 35),
-              tag: String(m?.tag || 'منبع وب').slice(0, 28),
+              tag: String(m?.tag || 'منبع وب').slice(0, 32),
+              match_type: ['exact_stolen', 'same_ad', 'visual_similar'].includes(m?.match_type) ? m.match_type : 'visual_similar',
+              note: String(m?.note || '').slice(0, 100),
               link: sanitizeHttpUrl(m?.link || '')
             })).filter(m => m.link)
           : [];
         return {
           checked: true,
-          risk_level: ['safe', 'warn', 'danger'].includes(rev.risk_level) ? rev.risk_level : 'warn',
-          verdict: String(rev.verdict || '').slice(0, 280),
+          vision_verified: Boolean(rev.vision_verified),
+          risk_level: ['safe', 'info', 'warn', 'danger'].includes(rev.risk_level) ? rev.risk_level : 'info',
+          verdict: String(rev.verdict || '').slice(0, 320),
           match_count: Number(rev.match_count) || matches.length,
+          exact_stolen_count: Number(rev.exact_stolen_count) || 0,
+          same_ad_count: Number(rev.same_ad_count) || 0,
+          similar_only_count: Number(rev.similar_only_count) || 0,
           iran_ad_matches: Number(rev.iran_ad_matches) || 0,
           matches
         };
@@ -5485,6 +5658,60 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         });
       }
 
+      function buildReverseMatchCard(m) {
+        const item = document.createElement('div');
+        item.className = 'comp-card';
+
+        const main = document.createElement('div');
+        main.className = 'comp-card-main';
+        const top = document.createElement('div');
+        top.className = 'comp-card-top';
+
+        const tag = document.createElement('span');
+        const tagCls = m.match_type === 'exact_stolen'
+          ? 'site-divar'
+          : m.match_type === 'same_ad'
+            ? 'site-safe'
+            : 'site-other';
+        tag.className = `site-tag ${tagCls}`;
+        tag.textContent = m.tag;
+
+        const title = document.createElement('span');
+        title.className = 'comp-title';
+        title.textContent = m.title;
+
+        top.appendChild(tag);
+        top.appendChild(title);
+        main.appendChild(top);
+
+        const noteParts = [];
+        if (m.source) noteParts.push(`منبع: ${m.source}`);
+        if (m.note) noteParts.push(m.note);
+        if (noteParts.length) {
+          const note = document.createElement('div');
+          note.className = 'comp-note';
+          note.textContent = noteParts.join(' • ');
+          main.appendChild(note);
+        }
+
+        const right = document.createElement('div');
+        right.className = 'comp-right';
+        const safeLink = sanitizeHttpUrl(m.link);
+        if (safeLink) {
+          const a = document.createElement('a');
+          a.className = 'comp-link';
+          a.href = safeLink;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.textContent = 'بررسی منبع ↗';
+          right.appendChild(a);
+        }
+
+        item.appendChild(main);
+        item.appendChild(right);
+        return item;
+      }
+
       function renderReverseImageCard(rev) {
         const card = document.getElementById('reverseImageCard');
         const badge = document.getElementById('reverseImageBadge');
@@ -5499,59 +5726,44 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         }
 
         card.style.display = 'block';
-        badge.textContent = rev.match_count > 0 ? `${rev.match_count} تطابق بصری` : 'بدون کپی در وب';
+        if (rev.exact_stolen_count > 0) {
+          badge.textContent = `🚨 ${rev.exact_stolen_count} کپی دقیق تاییدشده`;
+        } else if (rev.same_ad_count > 0) {
+          badge.textContent = '✅ متعلق به همین آگهی';
+        } else if (rev.similar_only_count > 0) {
+          badge.textContent = rev.vision_verified ? '✅ فقط شباهت ظاهری' : 'ℹ️ شباهت ظاهری';
+        } else {
+          badge.textContent = '✅ بدون کپی در وب';
+        }
+
         verdictEl.textContent = rev.verdict || '';
         verdictEl.style.color = rev.risk_level === 'danger'
           ? 'var(--danger-fg)'
           : rev.risk_level === 'warn'
             ? 'var(--warning-fg)'
-            : 'var(--success-fg)';
+            : rev.risk_level === 'info'
+              ? 'var(--accent-cyan)'
+              : 'var(--success-fg)';
 
-        (rev.matches || []).forEach(m => {
-          const item = document.createElement('div');
-          item.className = 'comp-card';
+        const allMatches = Array.isArray(rev.matches) ? rev.matches : [];
+        const importantMatches = allMatches.filter(m => m.match_type === 'exact_stolen' || m.match_type === 'same_ad');
+        const similarMatches = allMatches.filter(m => m.match_type === 'visual_similar');
 
-          const main = document.createElement('div');
-          main.className = 'comp-card-main';
-          const top = document.createElement('div');
-          top.className = 'comp-card-top';
+        importantMatches.forEach(m => listEl.appendChild(buildReverseMatchCard(m)));
 
-          const tag = document.createElement('span');
-          tag.className = `site-tag ${m.tag.includes('آگهی') ? 'site-divar' : 'site-other'}`;
-          tag.textContent = m.tag;
+        if (similarMatches.length > 0) {
+          const det = document.createElement('details');
+          det.className = 'similar-collapse';
+          const sum = document.createElement('summary');
+          sum.textContent = `👁️ مشاهده ${similarMatches.length} مورد با شباهت ظاهری (تاثیر منفی روی ریسک نداشتند) ▾`;
+          det.appendChild(sum);
 
-          const title = document.createElement('span');
-          title.className = 'comp-title';
-          title.textContent = m.title;
-
-          top.appendChild(tag);
-          top.appendChild(title);
-          main.appendChild(top);
-
-          if (m.source) {
-            const note = document.createElement('div');
-            note.className = 'comp-note';
-            note.textContent = `منبع: ${m.source}`;
-            main.appendChild(note);
-          }
-
-          const right = document.createElement('div');
-          right.className = 'comp-right';
-          const safeLink = sanitizeHttpUrl(m.link);
-          if (safeLink) {
-            const a = document.createElement('a');
-            a.className = 'comp-link';
-            a.href = safeLink;
-            a.target = '_blank';
-            a.rel = 'noopener noreferrer';
-            a.textContent = 'بررسی منبع ↗';
-            right.appendChild(a);
-          }
-
-          item.appendChild(main);
-          item.appendChild(right);
-          listEl.appendChild(item);
-        });
+          const innerList = document.createElement('div');
+          innerList.className = 'comp-list';
+          similarMatches.forEach(m => innerList.appendChild(buildReverseMatchCard(m)));
+          det.appendChild(innerList);
+          listEl.appendChild(det);
+        }
       }
 
       function renderFollowupThread(list) {
@@ -6268,9 +6480,10 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
       function renderAlertBox(box, level, title, subline, bullets) {
         const styles = {
           safe: { bg: 'var(--success-bg)', bd: 'var(--success-border)', fg: 'var(--success-fg)' },
+          info: { bg: 'var(--accent-subtle)', bd: 'rgba(40, 153, 245, 0.35)', fg: 'var(--accent-cyan)' },
           warn: { bg: 'var(--warning-bg)', bd: 'var(--warning-border)', fg: 'var(--warning-fg)' },
           danger: { bg: 'var(--danger-bg)', bd: 'var(--danger-border)', fg: 'var(--danger-fg)' }
-        }[level];
+        }[level] || { bg: 'var(--accent-subtle)', bd: 'rgba(40, 153, 245, 0.35)', fg: 'var(--accent-cyan)' };
 
         box.style.display = 'block';
         box.style.background = styles.bg;
@@ -6707,7 +6920,13 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
         const controller = new AbortController();
         const tid = setTimeout(() => controller.abort(), 20000);
         try {
-          const body = { image: imgObj.base64 };
+          const body = {
+            image: imgObj.base64,
+            context: {
+              rawText: document.getElementById('rawText').value.trim(),
+              details: collectActiveDetails()
+            }
+          };
           if (state.settings.serverSecretToken) body.authToken = state.settings.serverSecretToken;
           const res = await fetch(`${base}/api/reverse-image`, {
             method: 'POST',
@@ -6725,10 +6944,13 @@ ${historySummary ? `\nتاریخچه پیگیری قبلی:\n${historySummary}\n
           const bullets = (cleanRev.matches || []).map(m => `[${m.tag}] ${m.title} (${m.source || 'وب'})`);
           if (!bullets.length) bullets.push('هیچ نمونه تکراری از این عکس در گوگل و آگهی‌های دیگر دیده نشد.');
 
+          const titleText = cleanRev.exact_stolen_count > 0
+            ? `🚨 کپی دقیق تاییدشده در تصویر ${idx + 1}: ${cleanRev.exact_stolen_count} مورد`
+            : `✅ نتیجه بررسی تصویر ${idx + 1}: عکس دزدی تایید نشد`;
           renderAlertBox(
             box,
             cleanRev.risk_level,
-            `نتیجه ردیابی تصویر ${idx + 1}: ${cleanRev.match_count} تطابق`,
+            titleText,
             cleanRev.verdict,
             bullets
           );
